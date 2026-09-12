@@ -1,0 +1,15 @@
+{
+  "health": {
+    "status": "READY",
+    "voices": 1
+  },
+  "generate": {
+    "segment_id": "packaged_smoke",
+    "speaker_id": "SPK_01",
+    "voice_id": "vieneu_adam",
+    "audio_path": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\Local_TTS\\dist\\Local_TTS\\outputs\\packaged_smoke.wav",
+    "duration": 2.24,
+    "sample_rate": 48000,
+    "generation_time": 2.133802199998172
+  }
+}

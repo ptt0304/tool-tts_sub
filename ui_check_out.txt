@@ -1,0 +1,3 @@
+Local_TTS UI: Loading model
+Local_TTS UI: http://127.0.0.1:8765/
+INFO:     127.0.0.1:61293 - "GET / HTTP/1.1" 200 OK

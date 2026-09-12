@@ -1,0 +1,46 @@
+# Python virtual environments
+.venv/
+venv/
+env/
+.build-env/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyd
+
+# Build / distribution
+build/
+dist/
+*.egg-info/
+
+# Embedded Python runtime
+Python312/
+
+# FFmpeg binaries
+ffmpeg_bin/
+
+# HuggingFace downloaded models/cache
+models/huggingface/
+huggingface/
+.cache/
+.cache/huggingface/
+
+# Model binaries
+*.onnx
+*.data
+*.bin
+*.safetensors
+*.pt
+*.pth
+
+# DLL / native binaries
+*.dll
+
+# IDE
+.vscode/
+.idea/
+
+# Temp
+*.tmp
+*.log

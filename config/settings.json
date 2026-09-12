@@ -1,0 +1,4 @@
+{
+  "port": 8765,
+  "model_cache": "models/huggingface"
+}
