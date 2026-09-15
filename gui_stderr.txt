@@ -1,7 +1,0 @@
-INFO:Vieneu.V3Turbo:\u23f3 Loading VieNeu-TTS v3 Turbo (ONNX/CPU) from: pnnbao-ump/VieNeu-TTS-v3-Turbo/onnx_update ...
-INFO:Vieneu.V3Turbo:\u2705 VieNeu-TTS v3 Turbo ready (backend=onnx)
-INFO:Vieneu.V3Turbo:\U0001f4e2 Loaded 23 preset voices (default: Minh Quân)
-INFO:     Started server process [1944]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-INFO:     Uvicorn running on http://127.0.0.1:8765 (Press CTRL+C to quit)

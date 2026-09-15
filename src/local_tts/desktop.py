@@ -21,6 +21,10 @@ def application_root() -> Path:
 def build_service(root: Path) -> tuple[TTSService, VieNeuEngine]:
     registry_path = root / "voices" / "registry.json"
     records = json.loads(registry_path.read_text(encoding="utf-8")).get("voices", []) if registry_path.exists() else []
+    # Built-in presets are runtime-owned. Older registry files may contain Adam
+    # after an enable operation; discard that record before adding the canonical
+    # preset so a restart can never create a duplicate voice_id.
+    records = [record for record in records if record.get("voice_id") != "vieneu_adam"]
     voices = [Voice(voice_id=r["voice_id"], display_name=r["display_name"], status=VoiceStatus(r["status"]), source=r["source"], engine=r["engine"], reference_audio=Path(r["reference_audio"]) if r.get("reference_audio") else None, reference_text=Path(r["reference_text"]) if r.get("reference_text") else None, metadata=r.get("metadata", {}), status_reason=r.get("status_reason")) for r in records]
     voices.insert(0, Voice("vieneu_adam", "Adam", VoiceStatus.READY, "VieNeu built-in preset", "vieneu_v3", category=VoiceCategory.PRESET, metadata={"preset_name": "Adam"}))
     registry = VoiceRegistry(voices)
@@ -30,7 +34,7 @@ def build_service(root: Path) -> tuple[TTSService, VieNeuEngine]:
 
 def run_local_service() -> None:
     root = application_root()
-    for name in ("models", "voices", "config", "logs", "outputs"):
+    for name in ("models", "voices", "voices/backups", "config", "logs", "logs/diagnostics", "outputs", "outputs/previews", "outputs/validation"):
         (root / name).mkdir(parents=True, exist_ok=True)
     config_path = root / "config" / "settings.json"
     config = json.loads(config_path.read_text(encoding="utf-8")) if config_path.exists() else {}
@@ -60,7 +64,7 @@ def run_local_service() -> None:
 def run_local_gui() -> None:
     """Run the browser-based localhost operator UI."""
     root = application_root()
-    for name in ("models", "voices", "config", "logs", "outputs"):
+    for name in ("models", "voices", "voices/backups", "config", "logs", "logs/diagnostics", "outputs", "outputs/previews", "outputs/validation"):
         (root / name).mkdir(parents=True, exist_ok=True)
     config_path = root / "config" / "settings.json"
     config = json.loads(config_path.read_text(encoding="utf-8")) if config_path.exists() else {}

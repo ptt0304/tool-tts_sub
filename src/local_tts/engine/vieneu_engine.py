@@ -4,6 +4,7 @@ import threading
 import time
 import uuid
 import json
+import wave
 from dataclasses import replace
 from pathlib import Path
 
@@ -14,6 +15,11 @@ from local_tts.voice import VoiceRegistry
 
 class VieNeuEngine(TTSEngine):
     """One long-lived VieNeu v3 Turbo instance on the official CPU/ONNX path."""
+
+    # Full-length codec attention for long references grows quadratically. A
+    # 66-second clip requested an 11.18 GB contiguous ONNX buffer in testing.
+    # Keep the whole file for speaker identity, and bound only the style codes.
+    MAX_REFERENCE_CODE_SECONDS = 16.595
 
     def __init__(
         self,
@@ -96,13 +102,45 @@ class VieNeuEngine(TTSEngine):
             if voice.category is VoiceCategory.PRESET:
                 preset_name = voice.metadata["preset_name"]
                 audio = self._tts.infer(text, voice=preset_name)
-            elif voice.category is VoiceCategory.REFERENCE and voice.reference_audio:
-                stat = voice.reference_audio.stat()
-                key = (str(voice.reference_audio.resolve()), stat.st_size, stat.st_mtime_ns)
+            elif voice.category is VoiceCategory.REFERENCE and voice.reference_audio and voice.reference_text:
+                audio_stat = voice.reference_audio.stat()
+                text_stat = voice.reference_text.stat()
+                reference_text = voice.reference_text.read_text(encoding="utf-8-sig").strip()
+                if not reference_text:
+                    raise ValueError(f"Voice '{voice_id}' has an empty reference transcript")
+                key = (
+                    str(voice.reference_audio.resolve()), audio_stat.st_size, audio_stat.st_mtime_ns,
+                    str(voice.reference_text.resolve()), text_stat.st_size, text_stat.st_mtime_ns,
+                )
                 if key not in self._reference_cache:
-                    embedding, codes = self._tts.encode_reference(voice.reference_audio)
-                    self._reference_cache[key] = {"speaker_emb": embedding, "codes": codes}
-                audio = self._tts.infer(text, voice=self._reference_cache[key])
+                    with wave.open(str(voice.reference_audio), "rb") as source:
+                        duration = source.getnframes() / source.getframerate()
+                    code_seconds = min(duration, self.MAX_REFERENCE_CODE_SECONDS)
+                    if duration <= self.MAX_REFERENCE_CODE_SECONDS:
+                        embedding, codes = self._tts.engine.prepare_reference(
+                            str(voice.reference_audio), denoise=False,
+                            use_ref_codes=True, max_seconds=duration + 0.001,
+                        )
+                    else:
+                        embedding = self._tts.engine.extract_speaker_emb(str(voice.reference_audio))
+                        _, codes = self._tts.engine.prepare_reference(
+                            str(voice.reference_audio), denoise=False,
+                            use_ref_codes=True, max_seconds=code_seconds + 0.001,
+                        )
+                    self._reference_cache[key] = {
+                        "speaker_emb": embedding,
+                        "codes": codes,
+                        # VieNeu ONNX currently ignores ref_text during inference;
+                        # retaining it here makes pairing and cache invalidation explicit.
+                        "reference_text": reference_text,
+                    }
+                audio = self._tts.infer(
+                    text,
+                    voice=self._reference_cache[key],
+                    use_ref_codes=True,
+                    temperature=0.4,
+                    max_new_frames=300,
+                )
             else:
                 raise ValueError(f"Voice '{voice_id}' is not a VieNeu preset or reference WAV")
             if speed != 1.0:
@@ -127,7 +165,6 @@ class VieNeuEngine(TTSEngine):
                 "sample_rate": sample_rate,
                 "output_path": str(output_path),
             }
-            output_path.with_suffix(".json").write_text(json.dumps(telemetry, indent=2), encoding="utf-8")
             return SynthesisResult(
                 wav_bytes=output_path.read_bytes(),
                 sample_rate=sample_rate,

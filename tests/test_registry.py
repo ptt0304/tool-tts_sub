@@ -26,6 +26,24 @@ class ZKVoiceImporterTests(unittest.TestCase):
         self.assertEqual(ZKVoiceImporter.stable_slug("vbee_Anh Khôi"), "vbee_anh_khoi")
         self.assertEqual(ZKVoiceImporter.stable_slug("ZK_Nữ Long Tiếng"), "zk_nu_long_tieng")
 
+    def test_custom_library_prefixes_id_display_and_source(self) -> None:
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "CAPCUT Nữ hoạt ngôn.wav").write_bytes(b"wav")
+            (root / "CAPCUT Nữ hoạt ngôn.txt").write_text("text", encoding="utf-8")
+            result = ZKVoiceImporter(
+                id_prefix="xa",
+                source="Xuân An Voices mẫu",
+                display_prefix="xa_",
+                importer_name="xuan_an_voice_directory",
+            ).import_directory(root)
+
+        voice = result.voices[0]
+        self.assertEqual(voice.voice_id, "xa_capcut_nu_hoat_ngon")
+        self.assertEqual(voice.display_name, "xa_CAPCUT Nữ hoạt ngôn")
+        self.assertEqual(voice.source, "Xuân An Voices mẫu")
+        self.assertEqual(voice.metadata["library_prefix"], "xa")
+
     def test_duplicate_normalized_id_gets_deterministic_suffixes(self) -> None:
         with TemporaryDirectory() as directory:
             root = Path(directory)

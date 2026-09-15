@@ -11,10 +11,13 @@ from local_tts.models import VoiceStatus
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("command", nargs="?", default="gui", choices=["validate-voices", "serve", "gui"])
-    parser.add_argument("--voice-root", default=os.getenv("LOCAL_TTS_ZK_VOICE_ROOT"))
+    parser.add_argument("--voice-root")
+    parser.add_argument("--zk-voice-root", default=os.getenv("LOCAL_TTS_ZK_VOICE_ROOT"))
+    parser.add_argument("--xa-voice-root", default=os.getenv("LOCAL_TTS_XA_VOICE_ROOT"))
     parser.add_argument("--registry", default="voices/registry.json")
     parser.add_argument("--infer", action="store_true")
     parser.add_argument("--limit", type=int, default=1)
+    parser.add_argument("--paired-only", action="store_true", help="exclude incomplete WAV/TXT assets from the registry")
     args = parser.parse_args()
     if args.command == "serve":
         from local_tts.desktop import run_local_service
@@ -24,14 +27,34 @@ def main() -> None:
         from local_tts.desktop import run_local_gui
         run_local_gui()
         return
-    if not args.voice_root:
-        parser.error("--voice-root or LOCAL_TTS_ZK_VOICE_ROOT is required")
-    imported = ZKVoiceImporter().import_directory(Path(args.voice_root))
-    if imported.issues and not imported.voices:
-        parser.error(str(imported.issues))
-    voices = VoiceLibraryValidator().validate_incremental(imported.voices, Path(args.registry), args.infer, max(0, args.limit))
+    roots = []
+    zk_root = args.voice_root or args.zk_voice_root
+    if zk_root:
+        roots.append((ZKVoiceImporter(display_prefix="zk_"), Path(zk_root)))
+    if args.xa_voice_root:
+        roots.append((ZKVoiceImporter(
+            id_prefix="xa",
+            source="Xuân An Voices mẫu",
+            display_prefix="xa_",
+            importer_name="xuan_an_voice_directory",
+        ), Path(args.xa_voice_root)))
+    if not roots:
+        parser.error("--voice-root, --zk-voice-root, or --xa-voice-root is required")
+    imported_results = [importer.import_directory(root) for importer, root in roots]
+    issues = [issue for result in imported_results for issue in result.issues]
+    imported_voices = [voice for result in imported_results for voice in result.voices]
+    if args.paired_only:
+        imported_voices = [
+            voice for voice in imported_voices
+            if voice.reference_audio is not None and voice.reference_text is not None
+        ]
+    if issues and not imported_voices:
+        parser.error(str(issues))
+    if len({voice.voice_id for voice in imported_voices}) != len(imported_voices):
+        parser.error("voice_id collision across imported libraries")
+    voices = VoiceLibraryValidator().validate_incremental(imported_voices, Path(args.registry), args.infer, max(0, args.limit))
     counts = {status.value: sum(voice.status.value == status.value for voice in voices) for status in VoiceStatus}
-    print({"total": len(voices), "counts": counts, "issues": [issue.code for issue in imported.issues]})
+    print({"total": len(voices), "counts": counts, "issues": [issue.code for issue in issues]})
 
 
 if __name__ == "__main__":

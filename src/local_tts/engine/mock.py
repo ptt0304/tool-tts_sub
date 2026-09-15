@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+import io
+import wave
+
 from local_tts.engine.base import EngineHealth, TTSEngine
 from local_tts.models import SynthesisResult
 
@@ -25,4 +28,12 @@ class MockTTSEngine(TTSEngine):
         if speed <= 0:
             raise ValueError("speed must be positive")
         self.calls.append((text, voice_id, speed))
-        return SynthesisResult(b"RIFFMOCK", 48_000, voice_id)
+        sample_rate = 48_000
+        duration = 0.05
+        output = io.BytesIO()
+        with wave.open(output, "wb") as writer:
+            writer.setnchannels(1)
+            writer.setsampwidth(2)
+            writer.setframerate(sample_rate)
+            writer.writeframes(b"\x00\x00" * round(sample_rate * duration))
+        return SynthesisResult(output.getvalue(), sample_rate, voice_id, audio_duration_seconds=duration)

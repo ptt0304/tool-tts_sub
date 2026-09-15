@@ -44,3 +44,8 @@ huggingface/
 # Temp
 *.tmp
 *.log
+/logs/diagnostics/
+/outputs/previews/
+/outputs/validation/
+/outputs/diagnostics/
+/voices/backups/

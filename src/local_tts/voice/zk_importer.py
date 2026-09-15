@@ -25,6 +25,22 @@ class VoiceImportResult:
 class ZKVoiceImporter:
     """Imports one configured, flat OVoice_Voices directory without copying media."""
 
+    def __init__(
+        self,
+        *,
+        id_prefix: str = "zk",
+        source: str = "ZK OVoice_Voices",
+        display_prefix: str = "",
+        importer_name: str = "zk_voice_directory",
+    ) -> None:
+        normalized_prefix = self.stable_slug(id_prefix)
+        if not normalized_prefix:
+            raise ValueError("id_prefix must contain at least one letter or digit")
+        self._id_prefix = normalized_prefix
+        self._source = source
+        self._display_prefix = display_prefix
+        self._importer_name = importer_name
+
     def import_directory(self, root: Path) -> VoiceImportResult:
         if not root.exists() or not root.is_dir():
             return VoiceImportResult([], [ImportIssue("invalid_path", root, "voice directory does not exist or is not a directory")])
@@ -49,8 +65,9 @@ class ZKVoiceImporter:
         issues: list[ImportIssue] = []
         groups: dict[str, list[tuple[str, Path | None, Path | None, VoiceStatus, str | None]]] = {}
         for candidate in candidates:
-            normalized_id = f"zk_{self.stable_slug(candidate[0])}"
-            if normalized_id == "zk_":
+            slug = self.stable_slug(candidate[0])
+            normalized_id = f"{self._id_prefix}_{slug}"
+            if not slug:
                 issues.append(ImportIssue("invalid_name", candidate[1] or candidate[2], "name cannot form a stable voice_id"))
                 continue
             groups.setdefault(normalized_id, []).append(candidate)
@@ -66,13 +83,13 @@ class ZKVoiceImporter:
                     voice_id = f"{normalized_id}_{hashlib.sha256(name.encode('utf-8')).hexdigest()[:8]}"
                 voices.append(Voice(
                     voice_id=voice_id,
-                    display_name=name,
-                    source="ZK OVoice_Voices",
+                    display_name=f"{self._display_prefix}{name}",
+                    source=self._source,
                     engine="vieneu_v3_reference",
                     status=status,
                     reference_audio=wav,
                     reference_text=text,
-                    metadata={"importer": "zk_voice_directory"},
+                    metadata={"importer": self._importer_name, "library_prefix": self._id_prefix},
                     category=VoiceCategory.REFERENCE,
                     status_reason=reason,
                 ))

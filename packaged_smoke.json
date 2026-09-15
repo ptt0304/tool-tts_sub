@@ -1,15 +1,15 @@
 {
   "health": {
     "status": "READY",
-    "voices": 1
+    "voices": 2
   },
   "generate": {
-    "segment_id": "packaged_smoke",
+    "segment_id": "packaged_pause_smoke",
     "speaker_id": "SPK_01",
     "voice_id": "vieneu_adam",
-    "audio_path": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\Local_TTS\\dist\\Local_TTS\\outputs\\packaged_smoke.wav",
-    "duration": 2.24,
+    "audio_path": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\Local_TTS\\dist\\Local_TTS\\outputs\\packaged_pause_smoke.wav",
+    "duration": 3.76,
     "sample_rate": 48000,
-    "generation_time": 2.133802199998172
+    "generation_time": 5.699771299958229
   }
 }

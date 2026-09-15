@@ -19,6 +19,9 @@ placement, mixing, and video rendering.
 - Deterministic, safe WAV output names based on `segment_id`.
 - Single and sequential batch generation endpoints.
 - Local browser UI: select an SRT and ready voice to create one WAV per cue.
+- One-click 10-second preview for every usable voice, using the same sample text.
+- High-fidelity reference enrollment: complete WAV speaker embedding plus reference
+  codes (bounded to 16.595 seconds for long clips to keep ONNX memory safe).
 - No voice-cloning UI, fine-tuning, or training in V1.
 
 ## Requirements
@@ -41,9 +44,17 @@ Local_TTS/
 ├── _internal/                 # PyInstaller runtime and native dependencies
 ├── config/settings.json       # localhost port and model-cache location
 ├── models/huggingface/hub/    # external VieNeu model cache
-├── voices/registry.json       # voice metadata and validation status
-├── outputs/                   # generated WAV files
-└── logs/local_tts.log         # startup and model diagnostics
+├── voices/
+│   ├── registry.json          # voice metadata and validation status
+│   └── backups/               # registry backups
+├── outputs/
+│   ├── *.wav                  # generated WAV files (compatible public location)
+│   ├── previews/              # cached 10-second voice previews
+│   ├── validation/            # temporary voice-validation artifacts
+│   └── diagnostics/           # audio retained for diagnosis
+└── logs/
+    ├── local_tts.log          # normal application log
+    └── diagnostics/           # launch/build diagnostic logs
 ```
 
 Model weights are external to `Local_TTS.exe`. If
@@ -62,7 +73,10 @@ cd D:\path\to\Local_TTS
 
 The executable loads the model, starts the localhost API, and opens the local
 operator UI in the default browser at `http://127.0.0.1:8765/`. The UI provides
-SRT selection, ready-voice selection, speed, and batch generation. The console
+direct text or SRT/TXT input, voice selection, speed, configurable pauses,
+batch generation, and a **Nghe thử 10s** button beside every usable voice. All preview
+buttons use one common Vietnamese sample; the first request is generated lazily
+and later requests reuse the cached WAV. The console
 also reports model status:
 
 ```text
@@ -81,7 +95,9 @@ Press `Ctrl+C` or close the console to stop the service. Logs are written to
 1. Start `Local_TTS.exe` and wait for the browser UI to show **Model: READY**.
 2. Choose an `.srt` file and select a `READY` voice.
 3. Set an output prefix and optional speed (0–3).
-4. Select **Generate WAV Files from SRT**.
+4. Optionally open **Cấu hình ngắt nghỉ** to set pauses for punctuation,
+   newlines, or the `[break]` marker.
+5. Select **Tạo WAV**.
 
 The application creates `srt_000001.wav`, `srt_000002.wav`, and so on from the
 SRT cue numbers in `outputs/`. It does not place or mix audio on a timeline.
@@ -104,6 +120,7 @@ Base URL: `http://127.0.0.1:8765`
 | `GET` | `/api/health` | Model state and ready-voice count |
 | `GET` | `/api/voices` | Registered voice records |
 | `GET` | `/api/voices/{voice_id}` | One voice record |
+| `POST` | `/api/voices/{voice_id}/preview` | Playable, exact 10-second WAV preview |
 | `POST` | `/api/tts/generate` | Generate one WAV file |
 | `POST` | `/api/tts/batch` | Generate a sequential batch |
 
@@ -139,6 +156,10 @@ $body = @{
   voice_id   = "vieneu_adam"
   text       = "Chuyện này không liên quan đến cô."
   speed      = 1.0
+  pause_settings = @{
+    space = 0.0; comma = 0.25; period = 0.45; question = 0.55
+    colon = 0.30; ellipsis = 0.65; newline = 0.50; break_time = 1.0
+  }
 } | ConvertTo-Json
 
 Invoke-RestMethod -Method Post `
@@ -163,6 +184,16 @@ Example result:
 `segment_id` accepts letters, digits, `_`, and `-` only. Relative paths,
 absolute paths, unsafe characters, and Windows device names are rejected.
 Reusing a valid ID replaces its corresponding WAV.
+
+Pause configuration is optional. The browser UI stores it locally and sends it
+with each job. Insert `[break]` anywhere in text for the configured explicit
+pause. Runs of horizontal whitespace count once, and whitespace after punctuation
+does not add another pause. Quotes and exclamation marks do not create pauses.
+Punctuation is still passed to the speech model for natural Vietnamese cadence.
+Model-generated silence at each chunk boundary is normalized before Local_TTS
+inserts the configured pause, so the setting represents the intended total gap
+rather than extra silence added on top of the model output.
+API clients can omit `pause_settings` to retain VieNeu's normal handling.
 
 ### Generate a batch
 

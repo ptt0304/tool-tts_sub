@@ -1,6 +1,8 @@
 from pathlib import Path
 from tempfile import TemporaryDirectory
 import unittest
+import io
+import wave
 
 from fastapi.testclient import TestClient
 
@@ -16,7 +18,8 @@ class ApiTests(unittest.TestCase):
         ready = Voice("mock_voice", "Mock", VoiceStatus.READY, "test", "mock")
         pending = Voice("pending_voice", "Pending", VoiceStatus.REQUIRES_REFERENCE, "test", "mock")
         self.tmp = TemporaryDirectory()
-        self.client = TestClient(create_app(TTSService(VoiceRegistry([ready, pending]), MockTTSEngine(["mock_voice"])), Path(self.tmp.name)))
+        self.engine = MockTTSEngine(["mock_voice"])
+        self.client = TestClient(create_app(TTSService(VoiceRegistry([ready, pending]), self.engine), Path(self.tmp.name)))
 
     def tearDown(self) -> None:
         self.tmp.cleanup()
@@ -40,12 +43,24 @@ class ApiTests(unittest.TestCase):
         self.assertEqual(self.client.post("/api/tts/generate", json=self.payload(voice_id="missing")).json()["error"]["code"], "VOICE_NOT_FOUND")
         self.assertEqual(self.client.post("/api/tts/generate", json=self.payload(segment_id="../bad")).json()["error"]["code"], "INVALID_TEXT")
 
-    def test_batch_keeps_failed_segments_and_continues(self):
+    def test_failed_batch_discards_successful_segment_audio(self):
         response = self.client.post("/api/tts/batch", json={"items": [self.payload(segment_id="bad", voice_id="missing"), self.payload(segment_id="good")]})
         rows = response.json()["items"]
+        self.assertEqual(response.status_code, 422)
         self.assertEqual([row["segment_id"] for row in rows], ["bad", "good"])
         self.assertEqual(rows[0]["error"]["code"], "VOICE_NOT_FOUND")
-        self.assertTrue(Path(rows[1]["audio_path"]).is_file())
+        self.assertNotIn("audio_path", rows[1])
+        self.assertEqual(list(Path(self.tmp.name).glob("*.wav")), [])
+
+    def test_batch_writes_only_the_combined_wav(self):
+        response = self.client.post("/api/tts/batch", json={
+            "output_name": "episode_01.txt",
+            "items": [self.payload(segment_id="a"), self.payload(segment_id="b")],
+        })
+        self.assertEqual(response.status_code, 200)
+        output = Path(response.json()["output_path"])
+        self.assertEqual(output.name, "episode_01.wav")
+        self.assertEqual(list(Path(self.tmp.name).glob("*.wav")), [output])
 
     def test_windows_devices_and_empty_text_are_rejected(self):
         for name in ("CON", "NUL", "COM1", "LPT9", "C:\\bad", "/bad"):
@@ -55,3 +70,33 @@ class ApiTests(unittest.TestCase):
     def test_enable_rejects_non_reference_pending_voice(self):
         response = self.client.post("/api/voices/pending_voice/enable")
         self.assertEqual(response.status_code, 409)
+
+    def test_voice_preview_is_exactly_ten_seconds_and_cached(self):
+        first = self.client.post("/api/voices/mock_voice/preview")
+        second = self.client.post("/api/voices/mock_voice/preview")
+        self.assertEqual(first.status_code, 200)
+        self.assertEqual(first.headers["content-type"], "audio/wav")
+        self.assertEqual(first.headers["x-preview-seconds"], "10.0")
+        with wave.open(io.BytesIO(first.content), "rb") as reader:
+            self.assertEqual(reader.getnframes(), reader.getframerate() * 10)
+        self.assertEqual(first.content, second.content)
+        self.assertEqual(len(self.engine.calls), 1)
+        self.assertEqual(len(list((Path(self.tmp.name) / "previews").glob("mock_voice_*.wav"))), 1)
+
+    def test_voice_preview_rejects_non_ready_voice(self):
+        response = self.client.post("/api/voices/pending_voice/preview")
+        self.assertEqual(response.status_code, 409)
+
+    def test_generate_accepts_pause_configuration(self):
+        response = self.client.post("/api/tts/generate", json=self.payload(
+            text="Xin chào, bạn khỏe không?",
+            pause_settings={"space": 0.0, "comma": 0.1, "period": 0.2, "question": 0.25, "colon": 0.1, "ellipsis": 0.2, "newline": 0.3, "break_time": 0.4},
+        ))
+        self.assertEqual(response.status_code, 200)
+        self.assertGreater(response.json()["duration"], 0.3)
+
+    def test_invalid_pause_configuration_is_rejected(self):
+        response = self.client.post("/api/tts/generate", json=self.payload(
+            pause_settings={"comma": -1},
+        ))
+        self.assertEqual(response.status_code, 422)
