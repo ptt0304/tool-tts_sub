@@ -9,10 +9,17 @@ __pycache__/
 *.py[cod]
 *.pyd
 
-# Build / distribution
+# Build workspace
 build/
-dist/
 *.egg-info/
+
+# Packaged application
+# Keep the small launcher executable in Git. The onedir runtime, models,
+# generated audio, and native dependencies are rebuilt/provisioned locally.
+/dist/*
+!/dist/Local_TTS/
+/dist/Local_TTS/*
+!/dist/Local_TTS/Local_TTS.exe
 
 # Embedded Python runtime
 Python312/
@@ -45,10 +52,8 @@ huggingface/
 # Temp
 *.tmp
 *.log
-/logs/diagnostics/
-/outputs/previews/
-/outputs/validation/
-/outputs/diagnostics/
+/logs/
+/outputs/
 /voices/backups/
 /XA_Voices/
 /ZK_Voices/

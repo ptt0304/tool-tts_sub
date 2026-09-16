@@ -63,6 +63,34 @@ Model weights are external to `Local_TTS.exe`. If
 absent, VieNeu may download official artifacts during first startup when the
 machine has network access.
 
+## Source repository layout
+
+`Local_TTS` is the Git repository root. Keep Python modules under the standard
+`src/local_tts` package instead of copying them beside the executable:
+
+```text
+Local_TTS/
+├── src/local_tts/             # application source code
+├── tests/                     # unit and integration tests
+├── scripts/                   # build, smoke-test, and repository checks
+├── config/settings.json       # versioned defaults
+├── voices/registry.json       # versioned voice metadata
+└── dist/Local_TTS/
+    └── Local_TTS.exe          # versioned launcher (under 100 MB)
+```
+
+The PyInstaller `_internal` directory, model caches, voice assets, generated
+audio, logs, virtual environments, and build staging directories are local-only.
+Git cannot ignore files conditionally by size, so `.gitignore` excludes the
+known heavy artifact locations and extensions. Before committing, run:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\check_git_file_sizes.ps1
+```
+
+The check fails if any tracked or unignored file exceeds GitHub's 100,000,000
+byte file limit.
+
 ## Start the desktop application and service
 
 Double-click `Local_TTS.exe`, or run:
