@@ -91,12 +91,19 @@ class ApiTests(unittest.TestCase):
         response = self.client.post("/api/tts/generate", json=self.payload(
             text="Xin chào, bạn khỏe không?",
             pause_settings={"space": 0.0, "comma": 0.1, "period": 0.2, "question": 0.25, "colon": 0.1, "ellipsis": 0.2, "newline": 0.3, "break_time": 0.4},
+            chunking_settings={"preferred_syllables": 16, "soft_max_syllables": 24, "hard_max_syllables": 32, "minimum_chunk_syllables": 3, "merge_short_sentences": False},
         ))
         self.assertEqual(response.status_code, 200)
-        self.assertGreater(response.json()["duration"], 0.3)
+        self.assertGreaterEqual(response.json()["duration"], 0.3)
+        self.assertEqual(len(self.engine.calls), 1)
 
     def test_invalid_pause_configuration_is_rejected(self):
         response = self.client.post("/api/tts/generate", json=self.payload(
             pause_settings={"comma": -1},
+        ))
+        self.assertEqual(response.status_code, 422)
+
+        response = self.client.post("/api/tts/generate", json=self.payload(
+            chunking_settings={"preferred_syllables": 24, "soft_max_syllables": 16, "hard_max_syllables": 32},
         ))
         self.assertEqual(response.status_code, 422)

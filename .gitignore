@@ -22,6 +22,7 @@ ffmpeg_bin/
 
 # HuggingFace downloaded models/cache
 models/huggingface/
+models/piper/
 huggingface/
 .cache/
 .cache/huggingface/
@@ -49,3 +50,5 @@ huggingface/
 /outputs/validation/
 /outputs/diagnostics/
 /voices/backups/
+/XA_Voices/
+/ZK_Voices/

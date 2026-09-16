@@ -2,8 +2,8 @@
 
 Local_TTS is a Windows-local Vietnamese text-to-speech service for application
 integration. It accepts **text + voice ID** through a loopback REST API and
-returns a WAV file. The service uses VieNeu V3 Turbo through ONNX CPU, so it
-does not require an NVIDIA GPU or CUDA.
+returns a WAV file. The service uses VieNeu V3 Turbo and Piper through ONNX CPU,
+so it does not require an NVIDIA GPU or CUDA.
 
 Cartoon_Sub is the primary client. Local_TTS only owns `text + voice_id → WAV`.
 Cartoon_Sub owns speaker detection, translation, timestamps, timeline,
@@ -12,9 +12,9 @@ placement, mixing, and video rendering.
 ## Features
 
 - Windows executable or Python service; default bind is `127.0.0.1:8765`.
-- One ONNX CPU model is initialized once per process and reused for requests.
+- VieNeu is initialized once per process; Piper assets are validated at startup.
 - Serialized generation and output writing for safe CPU inference.
-- VieNeu preset voices plus validated ZK WAV/TXT reference voices.
+- VieNeu preset/reference voices plus the fixed Ngọc Huyền Piper model.
 - Stable voice IDs, persisted voice status, and validation evidence.
 - Deterministic, safe WAV output names based on `segment_id`.
 - Single and sequential batch generation endpoints.
@@ -44,6 +44,7 @@ Local_TTS/
 ├── _internal/                 # PyInstaller runtime and native dependencies
 ├── config/settings.json       # localhost port and model-cache location
 ├── models/huggingface/hub/    # external VieNeu model cache
+├── models/piper/              # Piper runtime, eSpeak data, and fixed model
 ├── voices/
 │   ├── registry.json          # voice metadata and validation status
 │   └── backups/               # registry backups
@@ -82,10 +83,14 @@ also reports model status:
 ```text
 Server: Running
 Address: 127.0.0.1:8765
-Engine: VieNeu | Backend: ONNX CPU
+Engines: VieNeu + Piper | Backend: ONNX CPU
 Model: Ready
 Voices: N ready
 ```
+
+When Piper assets are present, the ready-voice list includes
+`piper_ngoc_huyen`. Requests keep the same REST shape; Local_TTS routes this
+voice to Piper and the existing preset/reference voices to VieNeu.
 
 Press `Ctrl+C` or close the console to stop the service. Logs are written to
 `logs/local_tts.log`.
@@ -105,7 +110,18 @@ SRT cue numbers in `outputs/`. It does not place or mix audio on a timeline.
 Default configuration in `config/settings.json`:
 
 ```json
-{ "port": 8765, "model_cache": "models/huggingface" }
+{
+  "port": 8765,
+  "model_cache": "models/huggingface",
+  "tts_chunking": {
+    "preferred_syllables": 16,
+    "soft_max_syllables": 24,
+    "hard_max_syllables": 32,
+    "minimum_chunk_syllables": 3,
+    "merge_short_sentences": false,
+    "crossfade_ms": 10
+  }
+}
 ```
 
 Paths in this file resolve relative to the executable directory, not the
@@ -160,6 +176,11 @@ $body = @{
     space = 0.0; comma = 0.25; period = 0.45; question = 0.55
     colon = 0.30; ellipsis = 0.65; newline = 0.50; break_time = 1.0
   }
+  chunking_settings = @{
+    preferred_syllables = 16; soft_max_syllables = 24
+    hard_max_syllables = 32; minimum_chunk_syllables = 3
+    merge_short_sentences = $false; crossfade_ms = 10
+  }
 } | ConvertTo-Json
 
 Invoke-RestMethod -Method Post `
@@ -187,12 +208,17 @@ Reusing a valid ID replaces its corresponding WAV.
 
 Pause configuration is optional. The browser UI stores it locally and sends it
 with each job. Insert `[break]` anywhere in text for the configured explicit
-pause. Runs of horizontal whitespace count once, and whitespace after punctuation
-does not add another pause. Quotes and exclamation marks do not create pauses.
-Punctuation is still passed to the speech model for natural Vietnamese cadence.
-Model-generated silence at each chunk boundary is normalized before Local_TTS
-inserts the configured pause, so the setting represents the intended total gap
-rather than extra silence added on top of the model output.
+pause. Commas, colons, and horizontal whitespace stay inside a complete sentence
+and do not create isolated TTS calls. Quotes, questions, exclamations, and
+ellipses are preserved for model prosody. Model-generated trailing silence counts
+toward the configured boundary pause, so Local_TTS inserts only the missing
+duration rather than adding a second full pause. A zero-pause semantic split uses
+the configured tiny crossfade inside retained edge-silence margins.
+
+Chunking defaults come from `config/settings.json`; API callers may override
+them per request with `chunking_settings`. Complete sentences are retained by
+default. Only sentences beyond `hard_max_syllables` are split, using scored
+Vietnamese clause/conjunction boundaries rather than a character limit.
 API clients can omit `pause_settings` to retain VieNeu's normal handling.
 
 ### Generate a batch
@@ -235,9 +261,15 @@ Local_TTS imports stable IDs at discovery time; callers must not derive an ID
 from a display name. For example, `vbee_Anh Khôi` becomes
 `zk_vbee_anh_khoi`.
 
-ZK `name.wav` + `name.txt` assets are referenced in place, not copied. The TXT
-is retained as metadata; the current VieNeu V3 reference path does not require
-it at inference time.
+Reference assets live inside `XA_Voices` and `ZK_Voices`. Registry paths are
+stored relative to the application root so the complete Local_TTS folder can be
+moved without invalidating every voice. The current VieNeu adapter requires a
+nonempty WAV/TXT pair, uses the WAV for speaker/style conditioning, and retains
+the TXT for pairing and cache invalidation.
+
+The validated inventory is 81 `xa_*` Vietnamese voices, 18 `xa_en_*` English
+reference voices, and 51 `zk_*` voices. Runtime also adds the `vieneu_adam`
+preset and the fixed `piper_ngoc_huyen` model, for 152 READY voices total.
 
 | Status | Meaning |
 | --- | --- |
@@ -247,11 +279,12 @@ it at inference time.
 | `UNSUPPORTED` | Incompatible with the selected engine |
 | `REQUIRES_REFERENCE` | Imported candidate awaiting reference material |
 
-Validate the ZK library incrementally:
+Validate both local reference libraries incrementally:
 
 ```powershell
 .\Local_TTS.exe validate-voices `
-  --voice-root "D:\path\to\OVoice_Voices" `
+  --zk-voice-root ZK_Voices `
+  --xa-voice-root XA_Voices `
   --registry voices\registry.json `
   --infer --limit 1
 ```
@@ -260,8 +293,8 @@ Without `--infer`, only files are checked. With it, the model starts once and
 validates up to `--limit` eligible voices; results are cached in
 `voices/registry.json`. Restart the service after registry changes. This check
 proves audio generation, not subjective speaker similarity. See
-[docs/VOICE_LIBRARY.md](docs/VOICE_LIBRARY.md) before relocating source files,
-because the registry currently stores their paths.
+[docs/VOICE_LIBRARY.md](docs/VOICE_LIBRARY.md) for the validation evidence and
+voice-ID rules.
 
 ## Source development
 

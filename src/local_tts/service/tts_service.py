@@ -5,7 +5,7 @@ from dataclasses import replace
 from datetime import UTC, datetime
 from pathlib import Path
 
-from local_tts.audio import PauseSettings, synthesize_with_pauses
+from local_tts.audio import ChunkingSettings, PauseSettings, synthesize_with_pauses
 from local_tts.models import SynthesisResult, VoiceCategory, VoiceStatus
 from local_tts.voice import VoiceRegistry
 
@@ -15,10 +15,17 @@ class VoiceNotReadyError(ValueError):
 
 
 class TTSService:
-    def __init__(self, registry: VoiceRegistry, engine: TTSEngine, registry_path: Path | None = None) -> None:
+    def __init__(
+        self,
+        registry: VoiceRegistry,
+        engine: TTSEngine,
+        registry_path: Path | None = None,
+        chunking_settings: ChunkingSettings | None = None,
+    ) -> None:
         self.registry = registry
         self._engine = engine
         self._registry_path = registry_path
+        self._chunking_settings = chunking_settings or ChunkingSettings()
     def health(self):
         return self._engine.health()
 
@@ -40,13 +47,15 @@ class TTSService:
         voice_id: str,
         speed: float = 1.0,
         pauses: PauseSettings | None = None,
+        chunking: ChunkingSettings | None = None,
     ) -> SynthesisResult:
-        if pauses is None:
+        if pauses is None and chunking is None:
             return self.synthesize(text, voice_id, speed)
         return synthesize_with_pauses(
             lambda chunk: self.synthesize(chunk, voice_id, speed),
             text,
-            pauses,
+            pauses or PauseSettings(),
+            chunking or self._chunking_settings,
         )
 
     def enable_reference_voice(self, voice_id: str) -> None:

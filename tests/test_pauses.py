@@ -3,9 +3,9 @@ import unittest
 import wave
 from dataclasses import replace
 from pathlib import Path
-from tempfile import TemporaryDirectory
+from uuid import uuid4
 
-from local_tts.audio import PauseSettings, synthesize_with_pauses
+from local_tts.audio import ChunkingSettings, PauseSettings, estimate_syllables, normalize_text, plan_text_chunks, synthesize_with_pauses
 from local_tts.audio.pauses import _normalize_chunk_edges
 from local_tts.engine import MockTTSEngine
 
@@ -19,10 +19,10 @@ class PauseSynthesisTests(unittest.TestCase):
             "Xin chào, bạn.[break] Cảm ơn",
             settings,
         )
-        self.assertEqual([call[0] for call in engine.calls], ["Xin chào,", "bạn.", "Cảm ơn"])
+        self.assertEqual([call[0] for call in engine.calls], ["Xin chào, bạn.", "Cảm ơn"])
         with wave.open(io.BytesIO(result.wav_bytes), "rb") as reader:
             self.assertEqual(reader.getframerate(), 48_000)
-            self.assertAlmostEqual(reader.getnframes() / reader.getframerate(), 0.55, places=2)
+            self.assertAlmostEqual(reader.getnframes() / reader.getframerate(), 0.40, places=2)
 
     def test_consecutive_pause_markers_use_longest_pause(self):
         engine = MockTTSEngine(["voice"])
@@ -41,9 +41,9 @@ class PauseSynthesisTests(unittest.TestCase):
             "a  b.   c",
             PauseSettings(space=0.10, period=0.25),
         )
-        self.assertEqual([call[0] for call in engine.calls], ["a", "b.", "c"])
-        # Three 50 ms mock chunks + one space pause + one period pause.
-        self.assertAlmostEqual(result.audio_duration_seconds, 0.50, places=2)
+        self.assertEqual([call[0] for call in engine.calls], ["a b.", "c"])
+        # Whitespace no longer creates an isolated TTS request.
+        self.assertAlmostEqual(result.audio_duration_seconds, 0.35, places=2)
 
     def test_zero_space_keeps_natural_phrase_and_collapses_whitespace(self):
         engine = MockTTSEngine(["voice"])
@@ -63,9 +63,9 @@ class PauseSynthesisTests(unittest.TestCase):
         )
         self.assertEqual(
             [call[0] for call in engine.calls],
-            ["Bạn ổn không?", "Tôi ổn...", "Tiếp tục"],
+            ["'Bạn' ổn không?", '"Tôi" ổn!...', "Tiếp tục"],
         )
-        # Exclamation is ignored; the following ellipsis remains a 300 ms pause.
+        # Emotional punctuation and quotes are preserved for model prosody.
         self.assertAlmostEqual(result.audio_duration_seconds, 0.65, places=2)
 
     def test_invalid_pause_value_is_rejected(self):
@@ -99,7 +99,7 @@ class PauseSynthesisTests(unittest.TestCase):
         self.assertAlmostEqual(trimmed_trailing, 0.288, places=3)
         self.assertAlmostEqual(len(normalized) / 2 / sample_rate, 0.124, places=3)
 
-    def test_long_text_is_synthesized_in_bounded_chunks(self):
+    def test_long_text_uses_syllable_soft_constraints_not_character_chunks(self):
         engine = MockTTSEngine(["voice"])
         text = " ".join(["tiếng"] * 100)
         synthesize_with_pauses(
@@ -109,17 +109,58 @@ class PauseSynthesisTests(unittest.TestCase):
         )
         chunks = [call[0] for call in engine.calls]
         self.assertGreater(len(chunks), 1)
-        self.assertTrue(all(len(chunk) <= 180 for chunk in chunks))
+        self.assertTrue(all(estimate_syllables(chunk) <= 32 for chunk in chunks))
         self.assertEqual(" ".join(chunks), text)
+
+    def test_zero_pause_semantic_chunks_use_tiny_crossfade(self):
+        engine = MockTTSEngine(["voice"])
+        text = " ".join(["tiếng"] * 20)
+        result = synthesize_with_pauses(
+            lambda chunk: engine.synthesize(chunk, "voice"),
+            text,
+            PauseSettings(space=0),
+            ChunkingSettings(preferred_syllables=6, soft_max_syllables=8, hard_max_syllables=10, crossfade_ms=10),
+        )
+        raw_duration = len(engine.calls) * 0.05
+        self.assertGreater(len(engine.calls), 1)
+        self.assertLess(result.audio_duration_seconds, raw_duration)
+
+    def test_complete_sentence_is_not_split_at_comma(self):
+        chunks = plan_text_chunks("Xin chào, hôm nay bạn khỏe không?")
+        self.assertEqual([chunk.text for chunk in chunks], ["Xin chào, hôm nay bạn khỏe không?"])
+
+    def test_long_sentence_prefers_semantic_boundary(self):
+        text = (
+            "Mặc dù trời đã tối, nhưng cô ấy vẫn đứng trước cửa, chờ người mà cô đã không "
+            "gặp suốt mười năm và vẫn không muốn rời khỏi nơi ấy một mình."
+        )
+        chunks = plan_text_chunks(text, ChunkingSettings(hard_max_syllables=24))
+        self.assertGreater(len(chunks), 1)
+        self.assertIn(chunks[0].reason, {"comma", "strong_clause", "conjunction", "phrase"})
+        self.assertEqual(" ".join(chunk.text for chunk in chunks), text)
+
+    def test_vietnamese_protected_phrases_and_emotion_normalization(self):
+        self.assertEqual(len(plan_text_chunks("Anh ấy đã đi rồi.")), 1)
+        self.assertEqual(len(plan_text_chunks("Tôi mua hai chiếc xe mới.")), 1)
+        self.assertEqual(normalize_text("Trời ơi!!! Anh làm gì vậy??"), "Trời ơi! Anh làm gì vậy?")
+
+    def test_abbreviation_and_closing_quote_do_not_confuse_sentences(self):
+        chunks = plan_text_chunks('TS. An nói: "Tôi đồng ý." Sau đó ông rời đi.')
+        self.assertEqual(
+            [chunk.text for chunk in chunks],
+            ['TS. An nói: "Tôi đồng ý."', "Sau đó ông rời đi."],
+        )
 
     def test_successful_join_removes_engine_chunk_files(self):
         engine = MockTTSEngine(["voice"])
-        with TemporaryDirectory() as tmp:
+        tmp = Path(".tmp-tests") / f"pause-{uuid4().hex}"
+        tmp.mkdir(parents=True)
+        try:
             created: list[Path] = []
 
             def synthesize(text: str):
                 result = engine.synthesize(text, "voice")
-                path = Path(tmp) / f"chunk_{len(created)}.wav"
+                path = tmp / f"chunk_{len(created)}.wav"
                 path.write_bytes(result.wav_bytes)
                 created.append(path)
                 return replace(result, output_path=path)
@@ -132,6 +173,8 @@ class PauseSynthesisTests(unittest.TestCase):
             self.assertGreater(len(result.wav_bytes), 44)
             self.assertTrue(created)
             self.assertTrue(all(not path.exists() for path in created))
+        finally:
+            tmp.rmdir()
 
     def test_empty_audio_chunk_is_bisected_and_retried(self):
         engine = MockTTSEngine(["voice"])

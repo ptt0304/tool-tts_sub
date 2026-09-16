@@ -39,6 +39,7 @@ class Voice:
             "status": self.status,
             "source": self.source,
             "engine": self.engine,
+            "category": self.category,
             "status_reason": self.status_reason,
         }
 

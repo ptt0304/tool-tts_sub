@@ -16,7 +16,7 @@ from fastapi.responses import HTMLResponse, JSONResponse, Response
 from fastapi.exceptions import RequestValidationError
 from pydantic import BaseModel, Field
 
-from local_tts.audio import PREVIEW_SECONDS, PREVIEW_TEXT, PauseSettings, fit_wav_duration
+from local_tts.audio import ChunkingSettings, PREVIEW_SECONDS, PREVIEW_TEXT, PauseSettings, fit_wav_duration
 from local_tts.operator_ui import OPERATOR_UI
 from local_tts.service import TTSService, VoiceNotReadyError
 
@@ -38,6 +38,19 @@ class PauseRequest(BaseModel):
         return PauseSettings(**self.model_dump())
 
 
+class ChunkingRequest(BaseModel):
+    preferred_syllables: int = Field(default=16, ge=1, le=100)
+    soft_max_syllables: int = Field(default=24, ge=1, le=150)
+    hard_max_syllables: int = Field(default=32, ge=1, le=200)
+    minimum_chunk_syllables: int = Field(default=3, ge=1, le=50)
+    # The desktop defaults to exactly one request per complete sentence.
+    merge_short_sentences: bool = False
+    crossfade_ms: int = Field(default=10, ge=0, le=30)
+
+    def to_domain(self) -> ChunkingSettings:
+        return ChunkingSettings(**self.model_dump())
+
+
 class GenerateRequest(BaseModel):
     segment_id: str
     speaker_id: str = Field(min_length=1, max_length=128)
@@ -45,6 +58,7 @@ class GenerateRequest(BaseModel):
     text: str = Field(min_length=1, max_length=10_000)
     speed: float = Field(default=1.0, gt=0, le=3)
     pause_settings: PauseRequest | None = None
+    chunking_settings: ChunkingRequest | None = None
 
 
 class BatchRequest(BaseModel):
@@ -162,6 +176,7 @@ def create_app(service: TTSService, output_dir: Path) -> FastAPI:
                 payload.voice_id,
                 payload.speed,
                 payload.pause_settings.to_domain() if payload.pause_settings else None,
+                payload.chunking_settings.to_domain() if payload.chunking_settings else None,
             )
             logger.info("GENERATE done segment=%s duration=%.3fs", payload.segment_id, result.audio_duration_seconds or 0.0)
         except KeyError:

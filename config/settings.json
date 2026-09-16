@@ -1,4 +1,12 @@
 {
   "port": 8765,
-  "model_cache": "models/huggingface"
+  "model_cache": "models/huggingface",
+  "tts_chunking": {
+    "preferred_syllables": 16,
+    "soft_max_syllables": 24,
+    "hard_max_syllables": 32,
+    "minimum_chunk_syllables": 3,
+    "merge_short_sentences": false,
+    "crossfade_ms": 10
+  }
 }

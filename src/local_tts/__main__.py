@@ -32,12 +32,22 @@ def main() -> None:
     if zk_root:
         roots.append((ZKVoiceImporter(display_prefix="zk_"), Path(zk_root)))
     if args.xa_voice_root:
+        xa_root = Path(args.xa_voice_root)
+        vietnamese_root = xa_root / "Việt Nam"
+        english_root = xa_root / "English"
         roots.append((ZKVoiceImporter(
             id_prefix="xa",
-            source="Xuân An Voices mẫu",
+            source="Xuân An Voices mẫu/Việt Nam",
             display_prefix="xa_",
             importer_name="xuan_an_voice_directory",
-        ), Path(args.xa_voice_root)))
+        ), vietnamese_root if vietnamese_root.is_dir() else xa_root))
+        if english_root.is_dir():
+            roots.append((ZKVoiceImporter(
+                id_prefix="xa_en",
+                source="Xuân An Voices mẫu/English",
+                display_prefix="xa_en_",
+                importer_name="xuan_an_english_voice_directory",
+            ), english_root))
     if not roots:
         parser.error("--voice-root, --zk-voice-root, or --xa-voice-root is required")
     imported_results = [importer.import_directory(root) for importer, root in roots]

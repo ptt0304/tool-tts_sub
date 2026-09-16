@@ -3,7 +3,6 @@ from __future__ import annotations
 import io
 import logging
 import math
-import re
 import time
 import wave
 from array import array
@@ -12,6 +11,7 @@ from dataclasses import dataclass
 from typing import Callable
 
 from local_tts.models import SynthesisResult
+from local_tts.text_chunking import ChunkingSettings, TextChunk, estimate_syllables, plan_text_chunks
 
 
 logger = logging.getLogger("local_tts.audio.pauses")
@@ -43,87 +43,27 @@ class PauseSettings:
                 raise ValueError(f"{name} must be between 0 and 10 seconds")
 
 
-_IGNORED_QUOTES = re.compile(r'''['"“”‘’]''')
-_IGNORED_EXCLAMATIONS = re.compile(r"[!！]+")
-_DELIMITER = re.compile(r"(\[break\]|\.{3,}|\r?\n+|[ \t\f\v]+|[,;:?]|\.)", re.IGNORECASE)
 _EDGE_SILENCE_AMPLITUDE = 128  # approximately -48 dBFS for signed 16-bit PCM
 _EDGE_MARGIN_SECONDS = 0.012
 _FADE_SECONDS = 0.006
 
 
-def _split(text: str, settings: PauseSettings) -> list[tuple[str, float]]:
-    # Quotes are decoration and exclamation marks must not influence prosody.
-    # Replacing ! with one space prevents adjacent words from being joined.
-    text = _IGNORED_QUOTES.sub("", text)
-    text = _IGNORED_EXCLAMATIONS.sub(" ", text)
-    chunks: list[list[str | float]] = []
-    pending = ""
-    for part in _DELIMITER.split(text):
-        if not part:
-            continue
-        if not _DELIMITER.fullmatch(part):
-            pending += part
-            continue
-
-        lowered = part.lower()
-        is_space = bool(re.fullmatch(r"[ \t\f\v]+", part))
-        if is_space and settings.space == 0:
-            if pending and not pending.endswith(" "):
-                pending += " "
-            continue
-        if lowered == "[break]":
-            pause = settings.break_time
-        elif "\n" in part or "\r" in part:
-            pause = settings.newline
-        elif part.startswith("..."):
-            pause = settings.ellipsis
-        elif is_space:
-            pause = settings.space
-        elif part in {",", ";"}:
-            pause = settings.comma if part == "," else settings.colon
-        elif part == ":":
-            pause = settings.colon
-        elif part == "?":
-            pause = settings.question
-        else:
-            pause = settings.period
-
-        spoken = pending.strip()
-        if spoken:
-            # Let the model see the punctuation so it can produce the correct
-            # Vietnamese cadence. Its generated edge silence is normalized later,
-            # before the configured total pause is inserted.
-            prosody_mark = ""
-            if part.startswith("..."):
-                prosody_mark = "..."
-            elif part in {",", ";", ":", "?", "."}:
-                prosody_mark = part
-            chunks.append([spoken + prosody_mark, pause])
-            pending = ""
-        elif chunks and not is_space:
-            chunks[-1][1] = max(float(chunks[-1][1]), pause)
-
-    spoken = pending.strip()
-    if spoken:
-        chunks.append([spoken, 0.0])
-    result = [(str(chunk), float(pause)) for chunk, pause in chunks]
-    # VieNeu reference inference can return an empty waveform for very long
-    # single requests. Keep each synthesis request bounded while preserving
-    # the configured pause after the original punctuation boundary.
-    bounded: list[tuple[str, float]] = []
-    for spoken, pause in result:
-        words = spoken.split()
-        current: list[str] = []
-        size = 0
-        for word in words:
-            if current and size + 1 + len(word) > 180:
-                bounded.append((" ".join(current), 0.0))
-                current, size = [], 0
-            current.append(word)
-            size += len(word) + (1 if len(current) > 1 else 0)
-        if current:
-            bounded.append((" ".join(current), pause))
-    return bounded
+def _pause_for(chunk: TextChunk, settings: PauseSettings) -> float:
+    if chunk.boundary_after.endswith("_newline"):
+        base_boundary = chunk.boundary_after.removesuffix("_newline")
+        return max(_pause_for(TextChunk("", 0, base_boundary, "", 0), settings), settings.newline)
+    return {
+        "break": settings.break_time,
+        "newline": settings.newline,
+        "ellipsis": settings.ellipsis,
+        "question": settings.question,
+        "exclamation": settings.period,
+        "sentence": settings.period,
+        "colon": settings.colon,
+        "comma": settings.comma,
+        "phrase": settings.space,
+        "none": 0.0,
+    }.get(chunk.boundary_after, 0.0)
 
 
 def _decode_wav(data: bytes) -> tuple[wave._wave_params, bytes]:
@@ -134,7 +74,11 @@ def _decode_wav(data: bytes) -> tuple[wave._wave_params, bytes]:
         return params, reader.readframes(reader.getnframes())
 
 
-def _normalize_chunk_edges(audio_frames: bytes, params: wave._wave_params) -> tuple[bytes, float, float]:
+def _normalize_chunk_edges(
+    audio_frames: bytes,
+    params: wave._wave_params,
+    desired_trailing_silence: float = 0.0,
+) -> tuple[bytes, float, float]:
     """Remove model-added edge silence and soften the new boundaries.
 
     PauseSettings describes the total intended gap. Without this normalization,
@@ -161,7 +105,12 @@ def _normalize_chunk_edges(audio_frames: bytes, params: wave._wave_params) -> tu
     last = next(frame for frame in range(frame_count - 1, -1, -1) if active(frame))
     margin = round(_EDGE_MARGIN_SECONDS * params.framerate)
     start = max(0, first - margin)
-    end = min(frame_count, last + 1 + margin)
+    natural_trailing = frame_count - last - 1
+    retained_trailing = min(
+        natural_trailing,
+        max(margin, round(desired_trailing_silence * params.framerate)),
+    )
+    end = min(frame_count, last + 1 + retained_trailing)
     trimmed_leading = start / params.framerate
     trimmed_trailing = (frame_count - end) / params.framerate
     normalized = array("h", samples[start * channels:end * channels])
@@ -179,28 +128,88 @@ def _normalize_chunk_edges(audio_frames: bytes, params: wave._wave_params) -> tu
     return normalized.tobytes(), trimmed_leading, trimmed_trailing
 
 
-def _bisect_spoken(text: str) -> tuple[str, str] | None:
-    """Split a failed synthesis chunk near its midpoint without breaking words."""
-    words = text.split()
-    if len(words) < 2 or len(text) < 40:
-        return None
-    target = len(text) / 2
-    size = 0
-    split_at = 1
-    for index, word in enumerate(words[:-1], start=1):
-        size += len(word) + (1 if index > 1 else 0)
-        split_at = index
-        if size >= target:
-            break
-    return " ".join(words[:split_at]), " ".join(words[split_at:])
+def _trailing_silence_seconds(audio_frames: bytes, params: wave._wave_params) -> float:
+    if params.sampwidth != 2 or not audio_frames:
+        return 0.0
+    samples = array("h")
+    samples.frombytes(audio_frames)
+    channels = params.nchannels
+    frame_count = len(samples) // channels
+    last_active = next(
+        (
+            frame for frame in range(frame_count - 1, -1, -1)
+            if any(abs(samples[frame * channels + channel]) > _EDGE_SILENCE_AMPLITUDE for channel in range(channels))
+        ),
+        None,
+    )
+    if last_active is None:
+        return 0.0
+    return (frame_count - last_active - 1) / params.framerate
+
+
+def _append_crossfaded(
+    destination: bytearray,
+    audio_frames: bytes,
+    params: wave._wave_params,
+    crossfade_ms: int,
+) -> None:
+    """Join PCM16 chunks inside their retained silent edge margins."""
+    frame_width = params.nchannels * params.sampwidth
+    overlap_frames = min(
+        round(crossfade_ms / 1000 * params.framerate),
+        len(destination) // frame_width,
+        len(audio_frames) // frame_width,
+    )
+    if not destination or not overlap_frames or params.sampwidth != 2:
+        destination.extend(audio_frames)
+        return
+    overlap_bytes = overlap_frames * frame_width
+    previous = array("h")
+    incoming = array("h")
+    previous.frombytes(destination[-overlap_bytes:])
+    incoming.frombytes(audio_frames[:overlap_bytes])
+    channels = params.nchannels
+    for frame in range(overlap_frames):
+        incoming_gain = (frame + 1) / (overlap_frames + 1)
+        previous_gain = 1.0 - incoming_gain
+        for channel in range(channels):
+            index = frame * channels + channel
+            mixed = round(previous[index] * previous_gain + incoming[index] * incoming_gain)
+            previous[index] = max(-32768, min(32767, mixed))
+    destination[-overlap_bytes:] = previous.tobytes()
+    destination.extend(audio_frames[overlap_bytes:])
+    logger.info("SYNTH crossfade=%dms overlap_frames=%d", crossfade_ms, overlap_frames)
+
+
+def _retry_chunks(text: str) -> list[str]:
+    """Find semantic fallback boundaries after a provider rejects a chunk."""
+    syllables = estimate_syllables(text)
+    if syllables < 8:
+        return []
+    hard_max = max(4, syllables // 2)
+    preferred = min(16, hard_max)
+    minimum = min(3, preferred)
+    planned = plan_text_chunks(
+        text,
+        ChunkingSettings(
+            preferred_syllables=preferred,
+            soft_max_syllables=hard_max,
+            hard_max_syllables=hard_max,
+            minimum_chunk_syllables=minimum,
+        ),
+    )
+    return [chunk.text for chunk in planned] if len(planned) > 1 else []
 
 
 def synthesize_with_pauses(
     synthesize: Callable[[str], SynthesisResult],
     text: str,
     settings: PauseSettings,
+    chunking: ChunkingSettings | None = None,
 ) -> SynthesisResult:
-    chunks = _split(text, settings)
+    chunking = chunking or ChunkingSettings()
+    planned = plan_text_chunks(text, chunking)
+    chunks = [(chunk.text, _pause_for(chunk, settings)) for chunk in planned]
     if not chunks:
         raise ValueError("text must contain spoken content")
     started = time.perf_counter()
@@ -209,6 +218,7 @@ def synthesize_with_pauses(
     frames = bytearray()
     total_generation = 0.0
     completed_results: list[SynthesisResult] = []
+    previous_pause_seconds: float | None = None
 
     def cleanup_outputs() -> None:
         for completed in completed_results:
@@ -232,17 +242,15 @@ def synthesize_with_pauses(
             try:
                 result = synthesize(spoken)
             except RuntimeError as error:
-                halves = _bisect_spoken(spoken) if "empty audio" in str(error).lower() else None
-                if halves is None:
+                retries = _retry_chunks(spoken) if "empty audio" in str(error).lower() else []
+                if not retries:
                     raise
-                left, right = halves
                 logger.warning(
-                    "SYNTH empty audio; retrying chunk as chars=%d+%d",
-                    len(left),
-                    len(right),
+                    "SYNTH empty audio; retrying at %d semantic boundaries",
+                    len(retries) - 1,
                 )
-                pending_chunks.appendleft((right, pause_seconds))
-                pending_chunks.appendleft((left, 0.0))
+                for index, retry in reversed(list(enumerate(retries))):
+                    pending_chunks.appendleft((retry, pause_seconds if index == len(retries) - 1 else 0.0))
                 continue
             completed_results.append(result)
             completed_count += 1
@@ -253,18 +261,27 @@ def synthesize_with_pauses(
                 first_result = result
             elif signature != expected:
                 raise ValueError("TTS chunks returned incompatible WAV formats")
-            audio_frames, trimmed_leading, trimmed_trailing = _normalize_chunk_edges(audio_frames, params)
+            # Normalize only excessive edge silence. The small retained margin
+            # counts toward the requested pause, so it is never added twice.
+            audio_frames, trimmed_leading, trimmed_trailing = _normalize_chunk_edges(
+                audio_frames, params, pause_seconds
+            )
             if trimmed_leading or trimmed_trailing:
                 logger.info(
                     "SYNTH normalized edges leading=%.3fs trailing=%.3fs",
                     trimmed_leading,
                     trimmed_trailing,
                 )
-            frames.extend(audio_frames)
+            if frames and previous_pause_seconds == 0:
+                _append_crossfaded(frames, audio_frames, params, chunking.crossfade_ms)
+            else:
+                frames.extend(audio_frames)
             if pause_seconds:
-                silent_frames = round(pause_seconds * params.framerate)
+                natural_pause = _trailing_silence_seconds(audio_frames, params)
+                silent_frames = round(max(0.0, pause_seconds - natural_pause) * params.framerate)
                 fill = b"\x80" if params.sampwidth == 1 else b"\x00"
                 frames.extend(fill * silent_frames * params.nchannels * params.sampwidth)
+            previous_pause_seconds = pause_seconds
             total_generation += result.generation_seconds or 0.0
     except Exception:
         cleanup_outputs()

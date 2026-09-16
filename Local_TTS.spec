@@ -23,7 +23,7 @@ a = Analysis(
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
-    excludes=['torch', 'transformers', 'gradio'],
+    excludes=['torch', 'transformers', 'gradio', 'setuptools', 'win32com', 'pythoncom', 'pywintypes'],
     noarchive=False,
     optimize=0,
 )

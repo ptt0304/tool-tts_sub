@@ -1,15 +1,33 @@
 {
   "health": {
     "status": "READY",
-    "voices": 2
+    "voices": 152
   },
   "generate": {
     "segment_id": "packaged_pause_smoke",
     "speaker_id": "SPK_01",
     "voice_id": "vieneu_adam",
-    "audio_path": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\Local_TTS\\dist\\Local_TTS\\outputs\\packaged_pause_smoke.wav",
-    "duration": 3.76,
+    "duration": 3.4346041666666665,
     "sample_rate": 48000,
-    "generation_time": 5.699771299958229
+    "generation_time": 1.5468843999988167,
+    "audio_path": "D:\\Youtube\\tool\\TTS_Sub\\Local_TTS\\dist\\Local_TTS\\outputs\\packaged_pause_smoke.wav"
+  },
+  "piper_generate": {
+    "segment_id": "packaged_piper_smoke",
+    "speaker_id": "SPK_01",
+    "voice_id": "piper_ngoc_huyen",
+    "duration": 2.3478541666666666,
+    "sample_rate": 48000,
+    "generation_time": 4.577348600003461,
+    "audio_path": "D:\\Youtube\\tool\\TTS_Sub\\Local_TTS\\dist\\Local_TTS\\outputs\\packaged_piper_smoke.wav"
+  },
+  "chunking_generate": {
+    "segment_id": "packaged_chunking_smoke",
+    "speaker_id": "SPK_01",
+    "voice_id": "vieneu_adam",
+    "duration": 4.6308125,
+    "sample_rate": 48000,
+    "generation_time": 2.8100586000000476,
+    "audio_path": "D:\\Youtube\\tool\\TTS_Sub\\Local_TTS\\dist\\Local_TTS\\outputs\\packaged_chunking_smoke.wav"
   }
 }

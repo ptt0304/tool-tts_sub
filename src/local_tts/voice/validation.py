@@ -81,13 +81,22 @@ class VoiceLibraryValidator:
     @staticmethod
     def save(path: Path, voices: list[Voice]) -> None:
         path.parent.mkdir(parents=True, exist_ok=True)
+        application_root = path.resolve().parent.parent
+
+        def portable_path(asset: Path | None) -> str | None:
+            if asset is None:
+                return None
+            resolved = asset.resolve()
+            try:
+                return str(resolved.relative_to(application_root))
+            except ValueError:
+                return str(resolved)
+
         records = []
         for voice in voices:
-            records.append({"voice_id": voice.voice_id, "display_name": voice.display_name, "source": voice.source, "engine": voice.engine, "status": voice.status, "reference_audio": str(voice.reference_audio) if voice.reference_audio else None, "reference_text": str(voice.reference_text) if voice.reference_text else None, "metadata": voice.metadata, "validation_error": voice.metadata.get("validation_error"), "last_validated_time": voice.metadata.get("last_validated_at")})
+            records.append({"voice_id": voice.voice_id, "display_name": voice.display_name, "source": voice.source, "engine": voice.engine, "status": voice.status, "reference_audio": portable_path(voice.reference_audio), "reference_text": portable_path(voice.reference_text), "metadata": voice.metadata, "validation_error": voice.metadata.get("validation_error"), "last_validated_time": voice.metadata.get("last_validated_at")})
         for record, voice in zip(records, voices):
             record["status_reason"] = voice.status_reason
-            record["reference_audio"] = str(voice.reference_audio.resolve()) if voice.reference_audio else None
-            record["reference_text"] = str(voice.reference_text.resolve()) if voice.reference_text else None
         temporary = path.with_suffix(".tmp")
         temporary.write_text(json.dumps({"voices": records}, ensure_ascii=False, indent=2), encoding="utf-8")
         temporary.replace(path)

@@ -2,15 +2,26 @@
 
 ## API -> Service -> Engine
 
-HTTP API -> TTSService -> TTSEngine -> VieNeuEngine -> VieNeu-TTS.
+```text
+HTTP API -> TTSService -> RoutingEngine -> VieNeuEngine -> VieNeu-TTS
+                                      `-> PiperEngine -> Piper CLI/ONNX
+```
 
-The API validates transport inputs and returns service results; it never imports or calls VieNeu directly. TTSService resolves voice IDs through VoiceRegistry, coordinates serialized generation, and returns WAV results. TTSEngine defines the synthesis boundary; VieNeuEngine adapts the upstream SDK and audio output.
+The API validates transport inputs and returns service results; it never imports or calls a synthesis backend directly. TTSService resolves voice IDs through VoiceRegistry, coordinates serialized generation, and returns WAV results. TTSEngine defines the synthesis boundary. RoutingEngine selects the backend from the registered `engine`; VieNeuEngine adapts the upstream SDK, while PiperEngine runs fixed Piper ONNX models through the bundled CLI.
+
+Text chunking is provider-independent. `text_chunking` normalizes punctuation,
+segments complete sentences, and only splits overlong sentences at scored
+Vietnamese semantic/prosodic candidates. `audio.pauses` synthesizes those plans,
+retains useful natural trailing silence, fills only a missing pause duration, and
+uses a tiny configurable crossfade when adjacent semantic chunks have no pause.
+Speaker detection, emotion classification, subtitle timing, and overlap remain
+owned by Cartoon_Sub and are not inferred inside a TTS provider.
 
 V1 routes: GET /api/health, GET /api/voices, GET /api/voices/{voice_id}, POST /api/tts/generate, POST /api/tts/batch. CPU batch requests are processed sequentially; different voice IDs are resolved per item.
 
 ## Model lifecycle
 
-Create one V3 Turbo CPU/ONNX instance during application startup and reuse it for all requests. Use one application process/worker. Close the engine on shutdown. Health must distinguish initialization, readiness, and failure.
+Create one V3 Turbo CPU/ONNX instance during application startup and reuse it for all requests. Validate the bundled Piper runtime, eSpeak data, model, and config at the same startup boundary. Use one application process/worker. Close both backends on shutdown. Health must distinguish initialization, readiness, and failure.
 
 Complete required model provisioning before reporting synthesis readiness. Upstream can download missing artifacts and lazily initialize reference encoders; prepare enabled reference voices during startup where practical. Do not create a model per request. A service-level lock covers reference preparation and inference, including batch work. Upstream internal generation locks do not establish safety for the entire SDK lifecycle.
 
