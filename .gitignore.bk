@@ -1,0 +1,59 @@
+# Python virtual environments
+.venv/
+venv/
+env/
+.build-env/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyd
+
+# Build workspace
+build/
+*.egg-info/
+
+# Packaged application
+# Keep the small launcher executable in Git. The onedir runtime, models,
+# generated audio, and native dependencies are rebuilt/provisioned locally.
+/dist/*
+!/dist/Local_TTS/
+/dist/Local_TTS/*
+!/dist/Local_TTS/Local_TTS.exe
+
+# Embedded Python runtime
+Python312/
+
+# FFmpeg binaries
+ffmpeg_bin/
+
+# HuggingFace downloaded models/cache
+models/huggingface/
+models/piper/
+huggingface/
+.cache/
+.cache/huggingface/
+
+# Model binaries
+*.onnx
+*.data
+*.bin
+*.safetensors
+*.pt
+*.pth
+
+# DLL / native binaries
+*.dll
+
+# IDE
+.vscode/
+.idea/
+
+# Temp
+*.tmp
+*.log
+/logs/
+/outputs/
+/voices/backups/
+/XA_Voices/
+/ZK_Voices/

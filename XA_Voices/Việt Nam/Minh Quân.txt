@@ -1,0 +1,5 @@
+Máy in 3d là một phát minh quan trọng giúp biến các mô hình thiết kế trên máy tính thành vật thể thật. Khác với phương pháp gia công truyền thống là cắt gọt vật liệu từ một khối lớn. Máy in 3d hoạt động theo nguyên lý bồi đắp từng lớp vật liệu cho đến khi tạo thành sản phẩm hoàn chỉnh.
+
+Quá trình bắt đầu bằng việc thiết kế mô hình 3d trên phần mềm chuyên dụng. Sau đó, mô hình được phần mềm "cắt lớp" thành hàng trăm hoặc hàng nghìn lát cắt mỏng. Các dữ liệu này được gửi tới máy in dưới dạng lệnh điều khiển.
+
+Giọng tôi là MINH QUÂN, phù hợp nói các giáo dục khoa học.

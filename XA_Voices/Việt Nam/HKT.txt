@@ -1,0 +1,7 @@
+Đoạn mã này thực hiện việc kiểm tra và lọc dữ liệu trong danh sách người dùng để tìm ra những cá nhân có độ tuổi từ mười tám trở lên. Đầu tiên, chương trình khởi tạo một danh sách rỗng để lưu trữ kết quả. Sau đó, hệ thống sử dụng một vòng lặp để đi qua từng phần tử trong danh sách dữ liệu đầu vào. Tại mỗi bước lặp, một câu lệnh điều kiện sẽ kiểm tra giá trị của biến biểu thị số tuổi.
+
+Nếu điều kiện đúng (tuổi lớn hơn hoặc bằng mười tám), thông tin của người dùng đó sẽ ngay lập tức được thêm vào danh sách kết quả. Ngược lại, nếu điều kiện sai, chương trình sẽ bỏ qua và tiếp tục vòng lặp tiếp theo.
+
+Về mặt hiệu suất, phương pháp này có độ phức tạp thời gian tuyến tính, nghĩa là thời gian xử lý sẽ tăng tỷ lệ thuận với số lượng phần tử có trong danh sách ban đầu. Cách tiếp cận này rất tối ưu cho các tập dữ liệu vừa và nhỏ vì nó không đòi hỏi thêm các thao tác sắp xếp hay tính toán phức tạp, giúp tiết kiệm bộ nhớ lưu trữ tạm thời của hệ thống.
+
+Giọng HKT được tạo bởi tool Xuân An.

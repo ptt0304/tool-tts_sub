@@ -1,0 +1,937 @@
+{
+  "voices": [
+    {
+      "voice_id": "zk_vbee_anh_khoi",
+      "display_name": "vbee_Anh Khôi",
+      "source": "ZK OVoice_Voices",
+      "engine": "vieneu_v3_reference",
+      "status": "DISABLED",
+      "reference_audio": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Anh Khôi.wav",
+      "reference_text": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Anh Khôi.txt",
+      "metadata": {
+        "importer": "zk_voice_directory",
+        "last_validated_at": "2026-09-11T14:16:09.984158+00:00",
+        "reference_duration_seconds": "5.747",
+        "audio_size": "253500",
+        "audio_mtime_ns": "1782533328779190200"
+      },
+      "validation_error": null,
+      "last_validated_time": "2026-09-11T14:16:09.984158+00:00"
+    },
+    {
+      "voice_id": "zk_vbee_bao_trung",
+      "display_name": "vbee_Bảo Trung",
+      "source": "ZK OVoice_Voices",
+      "engine": "vieneu_v3_reference",
+      "status": "DISABLED",
+      "reference_audio": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Bảo Trung.wav",
+      "reference_text": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Bảo Trung.txt",
+      "metadata": {
+        "importer": "zk_voice_directory",
+        "last_validated_at": "2026-09-11T14:16:09.984158+00:00",
+        "reference_duration_seconds": "5.069",
+        "audio_size": "243374",
+        "audio_mtime_ns": "1782534161691054900"
+      },
+      "validation_error": null,
+      "last_validated_time": "2026-09-11T14:16:09.984158+00:00"
+    },
+    {
+      "voice_id": "zk_vbee_bao_trung_doc_truyen",
+      "display_name": "vbee_Bảo Trung Đọc Truyện",
+      "source": "ZK OVoice_Voices",
+      "engine": "vieneu_v3_reference",
+      "status": "DISABLED",
+      "reference_audio": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Bảo Trung Đọc Truyện.wav",
+      "reference_text": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Bảo Trung Đọc Truyện.txt",
+      "metadata": {
+        "importer": "zk_voice_directory",
+        "last_validated_at": "2026-09-11T14:16:09.984158+00:00",
+        "reference_duration_seconds": "5.235",
+        "audio_size": "251374",
+        "audio_mtime_ns": "1782534777151916800"
+      },
+      "validation_error": null,
+      "last_validated_time": "2026-09-11T14:16:09.984158+00:00"
+    },
+    {
+      "voice_id": "zk_vbee_bao_trung_review_phim",
+      "display_name": "vbee_Bảo Trung Review Phim",
+      "source": "ZK OVoice_Voices",
+      "engine": "vieneu_v3_reference",
+      "status": "DISABLED",
+      "reference_audio": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Bảo Trung Review Phim.wav",
+      "reference_text": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Bảo Trung Review Phim.txt",
+      "metadata": {
+        "importer": "zk_voice_directory",
+        "last_validated_at": "2026-09-11T14:16:09.984158+00:00",
+        "reference_duration_seconds": "4.958",
+        "audio_size": "238062",
+        "audio_mtime_ns": "1782536171747882100"
+      },
+      "validation_error": null,
+      "last_validated_time": "2026-09-11T14:16:09.984158+00:00"
+    },
+    {
+      "voice_id": "zk_vbee_bien_tap_vien_le_van",
+      "display_name": "vbee_Biên Tập Viên Lê Vân",
+      "source": "ZK OVoice_Voices",
+      "engine": "vieneu_v3_reference",
+      "status": "DISABLED",
+      "reference_audio": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Biên Tập Viên Lê Vân.wav",
+      "reference_text": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Biên Tập Viên Lê Vân.txt",
+      "metadata": {
+        "importer": "zk_voice_directory",
+        "last_validated_at": "2026-09-11T14:16:09.984158+00:00",
+        "reference_duration_seconds": "5.364",
+        "audio_size": "257566",
+        "audio_mtime_ns": "1782534918805455600"
+      },
+      "validation_error": null,
+      "last_validated_time": "2026-09-11T14:16:09.984158+00:00"
+    },
+    {
+      "voice_id": "zk_vbee_bo_un_tin_tuc",
+      "display_name": "vbee_Bố Ủn Tin Tức",
+      "source": "ZK OVoice_Voices",
+      "engine": "vieneu_v3_reference",
+      "status": "DISABLED",
+      "reference_audio": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Bố Ủn Tin Tức.wav",
+      "reference_text": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Bố Ủn Tin Tức.txt",
+      "metadata": {
+        "importer": "zk_voice_directory",
+        "last_validated_at": "2026-09-11T14:16:09.984158+00:00",
+        "reference_duration_seconds": "5.043",
+        "audio_size": "242158",
+        "audio_mtime_ns": "1782534580373652100"
+      },
+      "validation_error": null,
+      "last_validated_time": "2026-09-11T14:16:09.984158+00:00"
+    },
+    {
+      "voice_id": "zk_vbee_chi_dat",
+      "display_name": "vbee_Chí Đạt",
+      "source": "ZK OVoice_Voices",
+      "engine": "vieneu_v3_reference",
+      "status": "DISABLED",
+      "reference_audio": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Chí Đạt.wav",
+      "reference_text": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Chí Đạt.txt",
+      "metadata": {
+        "importer": "zk_voice_directory",
+        "last_validated_at": "2026-09-11T14:16:09.984158+00:00",
+        "reference_duration_seconds": "5.828",
+        "audio_size": "257084",
+        "audio_mtime_ns": "1782533216908133600"
+      },
+      "validation_error": null,
+      "last_validated_time": "2026-09-11T14:16:09.984158+00:00"
+    },
+    {
+      "voice_id": "zk_vbee_duy_onyx",
+      "display_name": "vbee_Duy Onyx",
+      "source": "ZK OVoice_Voices",
+      "engine": "vieneu_v3_reference",
+      "status": "DISABLED",
+      "reference_audio": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Duy Onyx.wav",
+      "reference_text": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Duy Onyx.txt",
+      "metadata": {
+        "importer": "zk_voice_directory",
+        "last_validated_at": "2026-09-11T14:16:09.984158+00:00",
+        "reference_duration_seconds": "4.369",
+        "audio_size": "209806",
+        "audio_mtime_ns": "1782534103280022300"
+      },
+      "validation_error": null,
+      "last_validated_time": "2026-09-11T14:16:09.984158+00:00"
+    },
+    {
+      "voice_id": "zk_vbee_duy_phuong",
+      "display_name": "vbee_Duy Phương",
+      "source": "ZK OVoice_Voices",
+      "engine": "vieneu_v3_reference",
+      "status": "DISABLED",
+      "reference_audio": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Duy Phương.wav",
+      "reference_text": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Duy Phương.txt",
+      "metadata": {
+        "importer": "zk_voice_directory",
+        "last_validated_at": "2026-09-11T14:16:09.984158+00:00",
+        "reference_duration_seconds": "5.963",
+        "audio_size": "263030",
+        "audio_mtime_ns": "1782533744312861100"
+      },
+      "validation_error": null,
+      "last_validated_time": "2026-09-11T14:16:09.984158+00:00"
+    },
+    {
+      "voice_id": "zk_vbee_giong_nam_tre_tu_nhien",
+      "display_name": "vbee_Giọng Nam Trẻ Tự Nhiên",
+      "source": "ZK OVoice_Voices",
+      "engine": "vieneu_v3_reference",
+      "status": "DISABLED",
+      "reference_audio": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Giọng Nam Trẻ Tự Nhiên.wav",
+      "reference_text": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Giọng Nam Trẻ Tự Nhiên.txt",
+      "metadata": {
+        "importer": "zk_voice_directory",
+        "last_validated_at": "2026-09-11T14:16:09.984158+00:00",
+        "reference_duration_seconds": "5.193",
+        "audio_size": "249326",
+        "audio_mtime_ns": "1782536500968992700"
+      },
+      "validation_error": null,
+      "last_validated_time": "2026-09-11T14:16:09.984158+00:00"
+    },
+    {
+      "voice_id": "zk_vbee_giong_tin_tuc_nam_chuan",
+      "display_name": "vbee_Giọng Tin Tức Nam Chuẩn",
+      "source": "ZK OVoice_Voices",
+      "engine": "vieneu_v3_reference",
+      "status": "DISABLED",
+      "reference_audio": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Giọng Tin Tức Nam Chuẩn.wav",
+      "reference_text": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Giọng Tin Tức Nam Chuẩn.txt",
+      "metadata": {
+        "importer": "zk_voice_directory",
+        "last_validated_at": "2026-09-11T14:16:09.984158+00:00",
+        "reference_duration_seconds": "5.129",
+        "audio_size": "246254",
+        "audio_mtime_ns": "1782536444221208400"
+      },
+      "validation_error": null,
+      "last_validated_time": "2026-09-11T14:16:09.984158+00:00"
+    },
+    {
+      "voice_id": "zk_vbee_ha_chi",
+      "display_name": "vbee_Hà Chi",
+      "source": "ZK OVoice_Voices",
+      "engine": "vieneu_v3_reference",
+      "status": "DISABLED",
+      "reference_audio": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Hà Chi.wav",
+      "reference_text": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Hà Chi.txt",
+      "metadata": {
+        "importer": "zk_voice_directory",
+        "last_validated_at": "2026-09-11T14:16:09.984158+00:00",
+        "reference_duration_seconds": "5.662",
+        "audio_size": "271854",
+        "audio_mtime_ns": "1782533160800620700"
+      },
+      "validation_error": null,
+      "last_validated_time": "2026-09-11T14:16:09.984158+00:00"
+    },
+    {
+      "voice_id": "zk_vbee_huisheng",
+      "display_name": "vbee_HuiSheng",
+      "source": "ZK OVoice_Voices",
+      "engine": "vieneu_v3_reference",
+      "status": "DISABLED",
+      "reference_audio": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_HuiSheng.wav",
+      "reference_text": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_HuiSheng.txt",
+      "metadata": {
+        "importer": "zk_voice_directory",
+        "last_validated_at": "2026-09-11T14:16:09.984158+00:00",
+        "reference_duration_seconds": "5.299",
+        "audio_size": "254446",
+        "audio_mtime_ns": "1782534248020172700"
+      },
+      "validation_error": null,
+      "last_validated_time": "2026-09-11T14:16:09.984158+00:00"
+    },
+    {
+      "voice_id": "zk_vbee_huong_giang",
+      "display_name": "vbee_Hương Giang",
+      "source": "ZK OVoice_Voices",
+      "engine": "vieneu_v3_reference",
+      "status": "DISABLED",
+      "reference_audio": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Hương Giang.wav",
+      "reference_text": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Hương Giang.txt",
+      "metadata": {
+        "importer": "zk_voice_directory",
+        "last_validated_at": "2026-09-11T14:16:09.984158+00:00",
+        "reference_duration_seconds": "5.823",
+        "audio_size": "256886",
+        "audio_mtime_ns": "1782533584269740700"
+      },
+      "validation_error": null,
+      "last_validated_time": "2026-09-11T14:16:09.984158+00:00"
+    },
+    {
+      "voice_id": "zk_vbee_lan_trinh",
+      "display_name": "vbee_Lan Trinh",
+      "source": "ZK OVoice_Voices",
+      "engine": "vieneu_v3_reference",
+      "status": "DISABLED",
+      "reference_audio": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Lan Trinh.wav",
+      "reference_text": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Lan Trinh.txt",
+      "metadata": {
+        "importer": "zk_voice_directory",
+        "last_validated_at": "2026-09-11T14:16:09.984158+00:00",
+        "reference_duration_seconds": "6.006",
+        "audio_size": "264950",
+        "audio_mtime_ns": "1782533677166722300"
+      },
+      "validation_error": null,
+      "last_validated_time": "2026-09-11T14:16:09.984158+00:00"
+    },
+    {
+      "voice_id": "zk_vbee_lap_bia",
+      "display_name": "vbee_Lập Bia",
+      "source": "ZK OVoice_Voices",
+      "engine": "vieneu_v3_reference",
+      "status": "DISABLED",
+      "reference_audio": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Lập Bia.wav",
+      "reference_text": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Lập Bia.txt",
+      "metadata": {
+        "importer": "zk_voice_directory",
+        "last_validated_at": "2026-09-11T14:16:09.984158+00:00",
+        "reference_duration_seconds": "4.361",
+        "audio_size": "209390",
+        "audio_mtime_ns": "1782536411426193400"
+      },
+      "validation_error": null,
+      "last_validated_time": "2026-09-11T14:16:09.984158+00:00"
+    },
+    {
+      "voice_id": "zk_vbee_mai_phuong",
+      "display_name": "vbee_Mai Phương",
+      "source": "ZK OVoice_Voices",
+      "engine": "vieneu_v3_reference",
+      "status": "DISABLED",
+      "reference_audio": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Mai Phương.wav",
+      "reference_text": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Mai Phương.txt",
+      "metadata": {
+        "importer": "zk_voice_directory",
+        "last_validated_at": "2026-09-11T14:16:09.984158+00:00",
+        "reference_duration_seconds": "5.404",
+        "audio_size": "238394",
+        "audio_mtime_ns": "1782533635718581200"
+      },
+      "validation_error": null,
+      "last_validated_time": "2026-09-11T14:16:09.984158+00:00"
+    },
+    {
+      "voice_id": "zk_vbee_manh_dung_v1",
+      "display_name": "vbee_Mạnh Dũng_v1",
+      "source": "ZK OVoice_Voices",
+      "engine": "vieneu_v3_reference",
+      "status": "DISABLED",
+      "reference_audio": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Mạnh Dũng_v1.wav",
+      "reference_text": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Mạnh Dũng_v1.txt",
+      "metadata": {
+        "importer": "zk_voice_directory",
+        "last_validated_at": "2026-09-11T14:16:09.984158+00:00",
+        "reference_duration_seconds": "5.732",
+        "audio_size": "252862",
+        "audio_mtime_ns": "1782533425075791700"
+      },
+      "validation_error": null,
+      "last_validated_time": "2026-09-11T14:16:09.984158+00:00"
+    },
+    {
+      "voice_id": "zk_vbee_manh_dung_v2_beta",
+      "display_name": "vbee_Mạnh Dũng_v2_beta",
+      "source": "ZK OVoice_Voices",
+      "engine": "vieneu_v3_reference",
+      "status": "DISABLED",
+      "reference_audio": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Mạnh Dũng_v2_beta.wav",
+      "reference_text": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Mạnh Dũng_v2_beta.txt",
+      "metadata": {
+        "importer": "zk_voice_directory",
+        "last_validated_at": "2026-09-11T14:16:09.984158+00:00",
+        "reference_duration_seconds": "5.150",
+        "audio_size": "247278",
+        "audio_mtime_ns": "1782532384664967400"
+      },
+      "validation_error": null,
+      "last_validated_time": "2026-09-11T14:16:09.984158+00:00"
+    },
+    {
+      "voice_id": "zk_vbee_minh_hoang",
+      "display_name": "vbee_Minh Hoàng",
+      "source": "ZK OVoice_Voices",
+      "engine": "vieneu_v3_reference",
+      "status": "DISABLED",
+      "reference_audio": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Minh Hoàng.wav",
+      "reference_text": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Minh Hoàng.txt",
+      "metadata": {
+        "importer": "zk_voice_directory",
+        "last_validated_at": "2026-09-11T14:16:09.984158+00:00",
+        "reference_duration_seconds": "5.823",
+        "audio_size": "256886",
+        "audio_mtime_ns": "1782533781884667600"
+      },
+      "validation_error": null,
+      "last_validated_time": "2026-09-11T14:16:09.984158+00:00"
+    },
+    {
+      "voice_id": "zk_vbee_minh_quan",
+      "display_name": "vbee_Minh Quân",
+      "source": "ZK OVoice_Voices",
+      "engine": "vieneu_v3_reference",
+      "status": "DISABLED",
+      "reference_audio": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Minh Quân.wav",
+      "reference_text": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Minh Quân.txt",
+      "metadata": {
+        "importer": "zk_voice_directory",
+        "last_validated_at": "2026-09-11T14:16:09.984158+00:00",
+        "reference_duration_seconds": "4.621",
+        "audio_size": "221902",
+        "audio_mtime_ns": "1782532649368326000"
+      },
+      "validation_error": null,
+      "last_validated_time": "2026-09-11T14:16:09.984158+00:00"
+    },
+    {
+      "voice_id": "zk_vbee_mona_pham_thanh_thuy_3773",
+      "display_name": "vbee_Mona Phạm Thanh Thủy 3773",
+      "source": "ZK OVoice_Voices",
+      "engine": "vieneu_v3_reference",
+      "status": "DISABLED",
+      "reference_audio": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Mona Phạm Thanh Thủy 3773.wav",
+      "reference_text": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Mona Phạm Thanh Thủy 3773.txt",
+      "metadata": {
+        "importer": "zk_voice_directory",
+        "last_validated_at": "2026-09-11T14:16:09.984158+00:00",
+        "reference_duration_seconds": "5.801",
+        "audio_size": "278510",
+        "audio_mtime_ns": "1782534869117767700"
+      },
+      "validation_error": null,
+      "last_validated_time": "2026-09-11T14:16:09.984158+00:00"
+    },
+    {
+      "voice_id": "zk_vbee_mr_cu",
+      "display_name": "vbee_MR CU",
+      "source": "ZK OVoice_Voices",
+      "engine": "vieneu_v3_reference",
+      "status": "DISABLED",
+      "reference_audio": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_MR CU.wav",
+      "reference_text": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_MR CU.txt",
+      "metadata": {
+        "importer": "zk_voice_directory",
+        "last_validated_at": "2026-09-11T14:16:09.984158+00:00",
+        "reference_duration_seconds": "4.595",
+        "audio_size": "220654",
+        "audio_mtime_ns": "1782534196293138700"
+      },
+      "validation_error": null,
+      "last_validated_time": "2026-09-11T14:16:09.984158+00:00"
+    },
+    {
+      "voice_id": "zk_vbee_nam_nhe_nhang_am_ap",
+      "display_name": "vbee_Nam Nhẹ Nhàng Ấm Áp",
+      "source": "ZK OVoice_Voices",
+      "engine": "vieneu_v3_reference",
+      "status": "DISABLED",
+      "reference_audio": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Nam Nhẹ Nhàng Ấm Áp.wav",
+      "reference_text": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Nam Nhẹ Nhàng Ấm Áp.txt",
+      "metadata": {
+        "importer": "zk_voice_directory",
+        "last_validated_at": "2026-09-11T14:16:09.984158+00:00",
+        "reference_duration_seconds": "4.787",
+        "audio_size": "229870",
+        "audio_mtime_ns": "1782534613220798600"
+      },
+      "validation_error": null,
+      "last_validated_time": "2026-09-11T14:16:09.984158+00:00"
+    },
+    {
+      "voice_id": "zk_vbee_nam_pro_trainer",
+      "display_name": "vbee_Nam Pro Trainer",
+      "source": "ZK OVoice_Voices",
+      "engine": "vieneu_v3_reference",
+      "status": "DISABLED",
+      "reference_audio": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Nam Pro Trainer.wav",
+      "reference_text": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Nam Pro Trainer.txt",
+      "metadata": {
+        "importer": "zk_voice_directory",
+        "last_validated_at": "2026-09-11T14:16:09.984158+00:00",
+        "reference_duration_seconds": "4.329",
+        "audio_size": "207854",
+        "audio_mtime_ns": "1782534542377819300"
+      },
+      "validation_error": null,
+      "last_validated_time": "2026-09-11T14:16:09.984158+00:00"
+    },
+    {
+      "voice_id": "zk_vbee_ngan_ha_tre_em",
+      "display_name": "vbee_Ngân Hà_tre em",
+      "source": "ZK OVoice_Voices",
+      "engine": "vieneu_v3_reference",
+      "status": "DISABLED",
+      "reference_audio": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Ngân Hà_tre em.wav",
+      "reference_text": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Ngân Hà_tre em.txt",
+      "metadata": {
+        "importer": "zk_voice_directory",
+        "last_validated_at": "2026-09-11T14:16:09.984158+00:00",
+        "reference_duration_seconds": "5.763",
+        "audio_size": "276686",
+        "audio_mtime_ns": "1782532718684872600"
+      },
+      "validation_error": null,
+      "last_validated_time": "2026-09-11T14:16:09.984158+00:00"
+    },
+    {
+      "voice_id": "zk_vbee_ngan_ke_chuyen",
+      "display_name": "vbee_Ngạn Kể Chuyện",
+      "source": "ZK OVoice_Voices",
+      "engine": "vieneu_v3_reference",
+      "status": "DISABLED",
+      "reference_audio": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Ngạn Kể Chuyện.wav",
+      "reference_text": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Ngạn Kể Chuyện.txt",
+      "metadata": {
+        "importer": "zk_voice_directory",
+        "last_validated_at": "2026-09-11T14:16:09.984158+00:00",
+        "reference_duration_seconds": "5.534",
+        "audio_size": "265710",
+        "audio_mtime_ns": "1782534016223950600"
+      },
+      "validation_error": null,
+      "last_validated_time": "2026-09-11T14:16:09.984158+00:00"
+    },
+    {
+      "voice_id": "zk_vbee_ngoc_huyen_v1",
+      "display_name": "vbee_Ngọc Huyền_v1",
+      "source": "ZK OVoice_Voices",
+      "engine": "vieneu_v3_reference",
+      "status": "DISABLED",
+      "reference_audio": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Ngọc Huyền_v1.wav",
+      "reference_text": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Ngọc Huyền_v1.txt",
+      "metadata": {
+        "importer": "zk_voice_directory",
+        "last_validated_at": "2026-09-11T14:16:09.984158+00:00",
+        "reference_duration_seconds": "5.510",
+        "audio_size": "486054",
+        "audio_mtime_ns": "1782530233419591200"
+      },
+      "validation_error": null,
+      "last_validated_time": "2026-09-11T14:16:09.984158+00:00"
+    },
+    {
+      "voice_id": "zk_vbee_ngoc_huyen_v2",
+      "display_name": "vbee_Ngọc Huyền_v2",
+      "source": "ZK OVoice_Voices",
+      "engine": "vieneu_v3_reference",
+      "status": "DISABLED",
+      "reference_audio": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Ngọc Huyền_v2.wav",
+      "reference_text": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Ngọc Huyền_v2.txt",
+      "metadata": {
+        "importer": "zk_voice_directory",
+        "last_validated_at": "2026-09-11T14:16:09.984158+00:00",
+        "reference_duration_seconds": "5.125",
+        "audio_size": "246078",
+        "audio_mtime_ns": "1782530373571097600"
+      },
+      "validation_error": null,
+      "last_validated_time": "2026-09-11T14:16:09.984158+00:00"
+    },
+    {
+      "voice_id": "zk_vbee_ngoc_lan",
+      "display_name": "vbee_Ngọc Lan",
+      "source": "ZK OVoice_Voices",
+      "engine": "vieneu_v3_reference",
+      "status": "DISABLED",
+      "reference_audio": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Ngọc Lan.wav",
+      "reference_text": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Ngọc Lan.txt",
+      "metadata": {
+        "importer": "zk_voice_directory",
+        "last_validated_at": "2026-09-11T14:16:09.984158+00:00",
+        "reference_duration_seconds": "6.017",
+        "audio_size": "265426",
+        "audio_mtime_ns": "1782533393765793700"
+      },
+      "validation_error": null,
+      "last_validated_time": "2026-09-11T14:16:09.984158+00:00"
+    },
+    {
+      "voice_id": "zk_vbee_nguyen_anh_ttcudv",
+      "display_name": "vbee_Nguyễn Anh TTCUDV",
+      "source": "ZK OVoice_Voices",
+      "engine": "vieneu_v3_reference",
+      "status": "DISABLED",
+      "reference_audio": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Nguyễn Anh TTCUDV.wav",
+      "reference_text": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Nguyễn Anh TTCUDV.txt",
+      "metadata": {
+        "importer": "zk_voice_directory",
+        "last_validated_at": "2026-09-11T14:16:09.984158+00:00",
+        "reference_duration_seconds": "5.075",
+        "audio_size": "243694",
+        "audio_mtime_ns": "1782536375113089000"
+      },
+      "validation_error": null,
+      "last_validated_time": "2026-09-11T14:16:09.984158+00:00"
+    },
+    {
+      "voice_id": "zk_vbee_nguyet_duong",
+      "display_name": "vbee_Nguyệt Dương",
+      "source": "ZK OVoice_Voices",
+      "engine": "vieneu_v3_reference",
+      "status": "DISABLED",
+      "reference_audio": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Nguyệt Dương.wav",
+      "reference_text": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Nguyệt Dương.txt",
+      "metadata": {
+        "importer": "zk_voice_directory",
+        "last_validated_at": "2026-09-11T14:16:09.984158+00:00",
+        "reference_duration_seconds": "6.327",
+        "audio_size": "279100",
+        "audio_mtime_ns": "1782533358754870300"
+      },
+      "validation_error": null,
+      "last_validated_time": "2026-09-11T14:16:09.984158+00:00"
+    },
+    {
+      "voice_id": "zk_vbee_nguyet_nga",
+      "display_name": "vbee_Nguyệt Nga",
+      "source": "ZK OVoice_Voices",
+      "engine": "vieneu_v3_reference",
+      "status": "DISABLED",
+      "reference_audio": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Nguyệt Nga.wav",
+      "reference_text": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Nguyệt Nga.txt",
+      "metadata": {
+        "importer": "zk_voice_directory",
+        "last_validated_at": "2026-09-11T14:16:09.984158+00:00",
+        "reference_duration_seconds": "5.374",
+        "audio_size": "258030",
+        "audio_mtime_ns": "1782533983559888200"
+      },
+      "validation_error": null,
+      "last_validated_time": "2026-09-11T14:16:09.984158+00:00"
+    },
+    {
+      "voice_id": "zk_vbee_nona_pham",
+      "display_name": "vbee_NoNa Phạm",
+      "source": "ZK OVoice_Voices",
+      "engine": "vieneu_v3_reference",
+      "status": "DISABLED",
+      "reference_audio": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_NoNa Phạm.wav",
+      "reference_text": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_NoNa Phạm.txt",
+      "metadata": {
+        "importer": "zk_voice_directory",
+        "last_validated_at": "2026-09-11T14:16:09.984158+00:00",
+        "reference_duration_seconds": "5.790",
+        "audio_size": "277998",
+        "audio_mtime_ns": "1782534505898823800"
+      },
+      "validation_error": null,
+      "last_validated_time": "2026-09-11T14:16:09.984158+00:00"
+    },
+    {
+      "voice_id": "zk_vbee_phap_van",
+      "display_name": "vbee_Pháp Vân",
+      "source": "ZK OVoice_Voices",
+      "engine": "vieneu_v3_reference",
+      "status": "DISABLED",
+      "reference_audio": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Pháp Vân.wav",
+      "reference_text": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Pháp Vân.txt",
+      "metadata": {
+        "importer": "zk_voice_directory",
+        "last_validated_at": "2026-09-11T14:16:09.984158+00:00",
+        "reference_duration_seconds": "6.659",
+        "audio_size": "319694",
+        "audio_mtime_ns": "1782536217983915100"
+      },
+      "validation_error": null,
+      "last_validated_time": "2026-09-11T14:16:09.984158+00:00"
+    },
+    {
+      "voice_id": "zk_vbee_phi_pham",
+      "display_name": "vbee_Phi Phàm",
+      "source": "ZK OVoice_Voices",
+      "engine": "vieneu_v3_reference",
+      "status": "DISABLED",
+      "reference_audio": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Phi Phàm.wav",
+      "reference_text": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Phi Phàm.txt",
+      "metadata": {
+        "importer": "zk_voice_directory",
+        "last_validated_at": "2026-09-11T14:16:09.984158+00:00",
+        "reference_duration_seconds": "5.481",
+        "audio_size": "263150",
+        "audio_mtime_ns": "1782536572388395300"
+      },
+      "validation_error": null,
+      "last_validated_time": "2026-09-11T14:16:09.984158+00:00"
+    },
+    {
+      "voice_id": "zk_vbee_phong_vien_nam",
+      "display_name": "vbee_Phóng Viên Nam",
+      "source": "ZK OVoice_Voices",
+      "engine": "vieneu_v3_reference",
+      "status": "DISABLED",
+      "reference_audio": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Phóng Viên Nam.wav",
+      "reference_text": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Phóng Viên Nam.txt",
+      "metadata": {
+        "importer": "zk_voice_directory",
+        "last_validated_at": "2026-09-11T14:16:09.984158+00:00",
+        "reference_duration_seconds": "4.713",
+        "audio_size": "226286",
+        "audio_mtime_ns": "1782534052553959600"
+      },
+      "validation_error": null,
+      "last_validated_time": "2026-09-11T14:16:09.984158+00:00"
+    },
+    {
+      "voice_id": "zk_vbee_quang_cao_02",
+      "display_name": "vbee_Quảng Cáo 02",
+      "source": "ZK OVoice_Voices",
+      "engine": "vieneu_v3_reference",
+      "status": "DISABLED",
+      "reference_audio": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Quảng Cáo 02.wav",
+      "reference_text": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Quảng Cáo 02.txt",
+      "metadata": {
+        "importer": "zk_voice_directory",
+        "last_validated_at": "2026-09-11T14:16:09.984158+00:00",
+        "reference_duration_seconds": "5.022",
+        "audio_size": "241134",
+        "audio_mtime_ns": "1782534651233515900"
+      },
+      "validation_error": null,
+      "last_validated_time": "2026-09-11T14:16:09.984158+00:00"
+    },
+    {
+      "voice_id": "zk_vbee_thang_chuyen_nghiep",
+      "display_name": "vbee_Thắng Chuyên Nghiệp",
+      "source": "ZK OVoice_Voices",
+      "engine": "vieneu_v3_reference",
+      "status": "DISABLED",
+      "reference_audio": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Thắng Chuyên Nghiệp.wav",
+      "reference_text": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Thắng Chuyên Nghiệp.txt",
+      "metadata": {
+        "importer": "zk_voice_directory",
+        "last_validated_at": "2026-09-11T14:16:09.984158+00:00",
+        "reference_duration_seconds": "4.465",
+        "audio_size": "214414",
+        "audio_mtime_ns": "1782534396301699000"
+      },
+      "validation_error": null,
+      "last_validated_time": "2026-09-11T14:16:09.984158+00:00"
+    },
+    {
+      "voice_id": "zk_vbee_thanh_long",
+      "display_name": "vbee_Thanh Long",
+      "source": "ZK OVoice_Voices",
+      "engine": "vieneu_v3_reference",
+      "status": "DISABLED",
+      "reference_audio": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Thanh Long.wav",
+      "reference_text": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Thanh Long.txt",
+      "metadata": {
+        "importer": "zk_voice_directory",
+        "last_validated_at": "2026-09-11T14:16:09.984158+00:00",
+        "reference_duration_seconds": "5.876",
+        "audio_size": "259220",
+        "audio_mtime_ns": "1782533470609334000"
+      },
+      "validation_error": null,
+      "last_validated_time": "2026-09-11T14:16:09.984158+00:00"
+    },
+    {
+      "voice_id": "zk_vbee_thao_trinh",
+      "display_name": "vbee_Thảo Trinh",
+      "source": "ZK OVoice_Voices",
+      "engine": "vieneu_v3_reference",
+      "status": "DISABLED",
+      "reference_audio": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Thảo Trinh.wav",
+      "reference_text": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Thảo Trinh.txt",
+      "metadata": {
+        "importer": "zk_voice_directory",
+        "last_validated_at": "2026-09-11T14:16:09.984158+00:00",
+        "reference_duration_seconds": "5.828",
+        "audio_size": "257084",
+        "audio_mtime_ns": "1782533256616845400"
+      },
+      "validation_error": null,
+      "last_validated_time": "2026-09-11T14:16:09.984158+00:00"
+    },
+    {
+      "voice_id": "zk_vbee_thien_tam",
+      "display_name": "vbee_Thiện Tâm",
+      "source": "ZK OVoice_Voices",
+      "engine": "vieneu_v3_reference",
+      "status": "DISABLED",
+      "reference_audio": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Thiện Tâm.wav",
+      "reference_text": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Thiện Tâm.txt",
+      "metadata": {
+        "importer": "zk_voice_directory",
+        "last_validated_at": "2026-09-11T14:16:09.984158+00:00",
+        "reference_duration_seconds": "6.296",
+        "audio_size": "302286",
+        "audio_mtime_ns": "1782533920589447600"
+      },
+      "validation_error": null,
+      "last_validated_time": "2026-09-11T14:16:09.984158+00:00"
+    },
+    {
+      "voice_id": "zk_vbee_trung_kien",
+      "display_name": "vbee_Trung Kiên",
+      "source": "ZK OVoice_Voices",
+      "engine": "vieneu_v3_reference",
+      "status": "DISABLED",
+      "reference_audio": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Trung Kiên.wav",
+      "reference_text": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Trung Kiên.txt",
+      "metadata": {
+        "importer": "zk_voice_directory",
+        "last_validated_at": "2026-09-11T14:16:09.984158+00:00",
+        "reference_duration_seconds": "6.148",
+        "audio_size": "271222",
+        "audio_mtime_ns": "1782533709492031400"
+      },
+      "validation_error": null,
+      "last_validated_time": "2026-09-11T14:16:09.984158+00:00"
+    },
+    {
+      "voice_id": "zk_vbee_tuan_anh_news",
+      "display_name": "vbee_Tuấn Anh News",
+      "source": "ZK OVoice_Voices",
+      "engine": "vieneu_v3_reference",
+      "status": "DISABLED",
+      "reference_audio": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Tuấn Anh News.wav",
+      "reference_text": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Tuấn Anh News.txt",
+      "metadata": {
+        "importer": "zk_voice_directory",
+        "last_validated_at": "2026-09-11T14:16:09.984158+00:00",
+        "reference_duration_seconds": "4.958",
+        "audio_size": "238062",
+        "audio_mtime_ns": "1782534290756899000"
+      },
+      "validation_error": null,
+      "last_validated_time": "2026-09-11T14:16:09.984158+00:00"
+    },
+    {
+      "voice_id": "zk_vbee_tue_giac",
+      "display_name": "vbee_Tuệ Giác",
+      "source": "ZK OVoice_Voices",
+      "engine": "vieneu_v3_reference",
+      "status": "DISABLED",
+      "reference_audio": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Tuệ Giác.wav",
+      "reference_text": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Tuệ Giác.txt",
+      "metadata": {
+        "importer": "zk_voice_directory",
+        "last_validated_at": "2026-09-11T14:16:09.984158+00:00",
+        "reference_duration_seconds": "6.025",
+        "audio_size": "289262",
+        "audio_mtime_ns": "1782534357164241200"
+      },
+      "validation_error": null,
+      "last_validated_time": "2026-09-11T14:16:09.984158+00:00"
+    },
+    {
+      "voice_id": "zk_vbee_tuong_vy",
+      "display_name": "vbee_Tường Vy",
+      "source": "ZK OVoice_Voices",
+      "engine": "vieneu_v3_reference",
+      "status": "DISABLED",
+      "reference_audio": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Tường Vy.wav",
+      "reference_text": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Tường Vy.txt",
+      "metadata": {
+        "importer": "zk_voice_directory",
+        "last_validated_at": "2026-09-11T14:16:09.984158+00:00",
+        "reference_duration_seconds": "5.762",
+        "audio_size": "254198",
+        "audio_mtime_ns": "1782533031260684000"
+      },
+      "validation_error": null,
+      "last_validated_time": "2026-09-11T14:16:09.984158+00:00"
+    },
+    {
+      "voice_id": "zk_vbee_tuyet_mai_sach_noi",
+      "display_name": "vbee_Tuyết Mai Sách Nói",
+      "source": "ZK OVoice_Voices",
+      "engine": "vieneu_v3_reference",
+      "status": "DISABLED",
+      "reference_audio": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Tuyết Mai Sách Nói.wav",
+      "reference_text": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Tuyết Mai Sách Nói.txt",
+      "metadata": {
+        "importer": "zk_voice_directory",
+        "last_validated_at": "2026-09-11T14:16:09.984158+00:00",
+        "reference_duration_seconds": "5.481",
+        "audio_size": "263150",
+        "audio_mtime_ns": "1782536608409457400"
+      },
+      "validation_error": null,
+      "last_validated_time": "2026-09-11T14:16:09.984158+00:00"
+    },
+    {
+      "voice_id": "zk_vbee_viet_bach_tre_em",
+      "display_name": "vbee_Việt Bách_ tre em",
+      "source": "ZK OVoice_Voices",
+      "engine": "vieneu_v3_reference",
+      "status": "DISABLED",
+      "reference_audio": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Việt Bách_ tre em.wav",
+      "reference_text": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Việt Bách_ tre em.txt",
+      "metadata": {
+        "importer": "zk_voice_directory",
+        "last_validated_at": "2026-09-11T14:16:09.984158+00:00",
+        "reference_duration_seconds": "5.635",
+        "audio_size": "270542",
+        "audio_mtime_ns": "1782532912224519900"
+      },
+      "validation_error": null,
+      "last_validated_time": "2026-09-11T14:16:09.984158+00:00"
+    },
+    {
+      "voice_id": "zk_vbee_voice_off_ban_tin",
+      "display_name": "vbee_Voice Off Bản Tin",
+      "source": "ZK OVoice_Voices",
+      "engine": "vieneu_v3_reference",
+      "status": "DISABLED",
+      "reference_audio": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Voice Off Bản Tin.wav",
+      "reference_text": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Voice Off Bản Tin.txt",
+      "metadata": {
+        "importer": "zk_voice_directory",
+        "last_validated_at": "2026-09-11T14:16:09.984158+00:00",
+        "reference_duration_seconds": "4.638",
+        "audio_size": "222702",
+        "audio_mtime_ns": "1782536339139126700"
+      },
+      "validation_error": null,
+      "last_validated_time": "2026-09-11T14:16:09.984158+00:00"
+    },
+    {
+      "voice_id": "zk_vbee_vy_quang_cao",
+      "display_name": "vbee_Vy Quảng Cáo",
+      "source": "ZK OVoice_Voices",
+      "engine": "vieneu_v3_reference",
+      "status": "DISABLED",
+      "reference_audio": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Vy Quảng Cáo.wav",
+      "reference_text": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\vbee_Vy Quảng Cáo.txt",
+      "metadata": {
+        "importer": "zk_voice_directory",
+        "last_validated_at": "2026-09-11T14:16:09.984158+00:00",
+        "reference_duration_seconds": "5.171",
+        "audio_size": "248302",
+        "audio_mtime_ns": "1782536249845656300"
+      },
+      "validation_error": null,
+      "last_validated_time": "2026-09-11T14:16:09.984158+00:00"
+    },
+    {
+      "voice_id": "zk_zk_nu_long_tieng",
+      "display_name": "ZK_Nu_Long_Tieng",
+      "source": "ZK OVoice_Voices",
+      "engine": "vieneu_v3_reference",
+      "status": "DISABLED",
+      "reference_audio": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\ZK_Nu_Long_Tieng.WAV",
+      "reference_text": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\ZK_Nu_Long_Tieng.txt",
+      "metadata": {
+        "importer": "zk_voice_directory",
+        "last_validated_at": "2026-09-11T14:16:09.984158+00:00",
+        "reference_duration_seconds": "6.989",
+        "audio_size": "1232974",
+        "audio_mtime_ns": "1771593877778942500"
+      },
+      "validation_error": null,
+      "last_validated_time": "2026-09-11T14:16:09.984158+00:00"
+    },
+    {
+      "voice_id": "zk_zzz",
+      "display_name": "zzz",
+      "source": "ZK OVoice_Voices",
+      "engine": "vieneu_v3_reference",
+      "status": "INVALID",
+      "reference_audio": null,
+      "reference_text": "D:\\Documents\\MMO\\Youtube\\Tools\\TTS_Sub\\ZKApps_v3_6\\OVoice_Voices\\zzz.txt",
+      "metadata": {
+        "importer": "zk_voice_directory",
+        "last_validated_at": "2026-09-11T14:16:09.984158+00:00"
+      },
+      "validation_error": null,
+      "last_validated_time": "2026-09-11T14:16:09.984158+00:00"
+    }
+  ]
+}
